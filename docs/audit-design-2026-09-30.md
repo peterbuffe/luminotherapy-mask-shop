@@ -51,3 +51,14 @@ Les animations existantes sont conservées : « la lumière baisse », lueur du 
 - Tout est coupé si « réduire les animations » est actif.
 - Sans JavaScript, rien n'est caché.
 - Une liste déjà visible à l'écran au chargement n'est pas masquée.
+
+## Accueil « cinéma » (30/09, thème `la-penombre-17 (cinema)`, id 209007411531, non publié)
+
+- Transposé de la maquette validée (`docs/maquette-accueil-cinema.html`, publiée en artefact : https://claude.ai/artifact/6i3t8oYsZSScfrFALKi4Zo).
+- Nouvelle section `sections/penombre-cinema.liquid`, avec `assets/penombre-cinema.css`. `templates/index.json` ne contient plus que cette section et `penombre-palette`.
+- **Hero :** vidéo en boucle et sans son, tirée de Contenu > Fichiers.
+  - Sur ordinateur : `masque-du-soir-chevet-rouge.mp4` (11 Mo).
+  - Sur téléphone : `masque-du-soir-draps-bleu.mp4` (5 Mo).
+  - Image fixe si « réduire les animations » ou « économie de données » est actif.
+- **Parcours :** 5 temps (lumières, rituel avec minuteur d'une minute, preuves avec l'encadré « Pas de prix barré… », 5 questions, liste d'attente). La liste d'attente enregistre les inscrits avec les tags `liste-attente,masque-du-soir`, comme la fiche produit.
+- **Aperçu :** https://lapenombre.fr/?preview_theme_id=209007411531

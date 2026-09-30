@@ -1,0 +1,392 @@
+<title>La Pénombre, maquette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Mise en page : récit éditorial plein cadre, alternance nuit / lin, la lumière du masque comme seule image. */
+:root{
+  --nuit:#150812;       /* fond principal, prune presque noir */
+  --nuit-2:#1D0E19;     /* reliefs sur fond sombre */
+  --clair:#F6EBEF;      /* texte sur sombre */
+  --clair-dim:#CDB3BF;  /* texte secondaire sur sombre */
+  --rose:#CC98A6;       /* accent unique, vieux rose */
+  --lin:#F7EEF0;        /* sections claires */
+  --encre:#22101D;      /* texte sur clair */
+  --doux:#62505C;       /* texte secondaire sur clair */
+  --rose-d:#84475A;     /* accent sur clair */
+  --line:rgba(246,235,239,.14);
+  --line-d:rgba(34,16,29,.14);
+  --led-b:#6F8DF0; --led-r:#E2463F; --led-ir:#B9283D;
+  --disp:'Fraunces','Iowan Old Style',Georgia,serif;
+  --body:'Instrument Sans','Helvetica Neue',Arial,sans-serif;
+  --w:1180px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--nuit);color:var(--clair);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--w);margin:0 auto;padding-inline:clamp(16px,4vw,48px)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+.lin :focus-visible{outline-color:var(--rose-d)}
+h1,h2,h3{font-family:var(--disp);font-weight:300;margin:0;text-wrap:balance;letter-spacing:-.015em}
+p{margin:0}
+.kicker{font-size:12px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--rose)}
+.lin .kicker{color:var(--rose-d)}
+
+/* Bandeau maquette */
+.proto{background:var(--rose);color:var(--nuit);font-size:13px;font-weight:500;text-align:center;padding:8px 16px}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;min-height:clamp(600px,88svh,880px);display:flex;flex-direction:column;overflow:hidden;background:radial-gradient(120% 90% at 70% 45%,#2A0F22 0%,var(--nuit) 62%)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(21,8,18,.92) 0%,rgba(21,8,18,.55) 38%,rgba(21,8,18,0) 62%),linear-gradient(0deg,rgba(21,8,18,.85) 0%,rgba(21,8,18,0) 40%)}
+.nav{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:22px}
+.logo{font-family:var(--disp);font-size:20px;font-weight:400;letter-spacing:.02em;text-decoration:none}
+.logo em{font-style:italic;color:var(--rose)}
+.nav ul{list-style:none;display:flex;gap:28px;margin:0;padding:0}
+.nav ul a{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--clair-dim);transition:color .2s}
+.nav ul a:hover{color:var(--clair)}
+.hero__body{position:relative;z-index:2;margin-top:auto;padding-block:0 clamp(40px,7vw,88px);display:grid;gap:22px;max-width:620px}
+.hero h1{font-size:clamp(44px,7.2vw,92px);line-height:.98}
+.hero h1 em{font-style:italic;color:var(--rose)}
+.hero__lead{font-size:17px;color:var(--clair-dim);max-width:44ch}
+.hero__row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px}
+.ghost{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;border:1px solid var(--clair);background:transparent;color:var(--clair);font:500 12.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:background .2s,color .2s}
+.ghost:hover{background:var(--clair);color:var(--nuit)}
+.price{font-family:var(--disp);font-size:22px}
+.price small{display:block;font-family:var(--body);font-size:12.5px;color:var(--clair-dim);letter-spacing:.02em}
+
+/* sélecteur de lumière */
+.lights{position:absolute;z-index:3;right:clamp(16px,4vw,48px);bottom:clamp(40px,7vw,88px);display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.lights__label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--clair-dim)}
+.lights__set{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.light-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:rgba(21,8,18,.55);color:var(--clair);font:500 13px var(--body);cursor:pointer;transition:border-color .2s,background .2s}
+.light-btn i{width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+.light-btn[aria-pressed="true"]{border-color:var(--clair);background:rgba(246,235,239,.08)}
+.light-btn:hover{border-color:var(--clair-dim)}
+.ia{position:absolute;z-index:2;left:clamp(16px,4vw,48px);bottom:14px;font-size:11.5px;color:rgba(246,235,239,.5)}
+
+/* ---------- Sections ---------- */
+section.s{padding-block:clamp(72px,10vw,140px)}
+.lin{background:var(--lin);color:var(--encre)}
+.s__head{display:grid;gap:18px;max-width:640px;margin-bottom:clamp(40px,6vw,72px)}
+.s__head h2{font-size:clamp(34px,4.6vw,56px);line-height:1.05}
+.s__head h2 em{font-style:italic;color:var(--rose)}
+.lin .s__head h2 em{color:var(--rose-d)}
+.s__head p{color:var(--clair-dim);font-size:17px;max-width:52ch}
+.lin .s__head p{color:var(--doux)}
+
+/* Les trois lumières : une coupe de peau */
+.depth{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,40px)}
+.dcol{display:grid;gap:14px;align-content:start}
+.gauge{position:relative;height:190px;border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(246,235,239,.05),rgba(246,235,239,0))}
+.gauge__beam{position:absolute;left:50%;top:0;width:44%;transform:translateX(-50%);height:var(--d);background:linear-gradient(180deg,var(--c),transparent);opacity:.85;filter:blur(.5px)}
+.gauge__tick{position:absolute;left:0;right:0;border-top:1px dashed var(--line);font-size:11px;color:var(--clair-dim);padding-top:2px;font-variant-numeric:tabular-nums}
+.dcol h3{font-size:26px}
+.nm{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--clair-dim);font-variant-numeric:tabular-nums}
+.dcol p{color:var(--clair-dim);font-size:15.5px}
+.note{margin-top:28px;font-size:13.5px;color:var(--clair-dim);max-width:70ch}
+
+/* Le rituel : trois gestes, dans l'ordre */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,40px)}
+.steps li{display:grid;gap:12px;padding-top:22px;border-top:1px solid var(--line-d)}
+.steps b{font-family:var(--disp);font-weight:300;font-style:italic;font-size:44px;line-height:1;color:var(--rose-d)}
+.steps h3{font-size:24px}
+.steps p{color:var(--doux);font-size:15.5px}
+.timer{margin-top:clamp(40px,5vw,64px);display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.timer__bar{flex:1 1 260px;height:2px;background:var(--line-d);position:relative;overflow:hidden}
+.timer__bar span{position:absolute;inset:0;background:var(--rose-d);transform-origin:left;transform:scaleX(var(--p,1))}
+.timer__t{font-family:var(--disp);font-size:28px;font-variant-numeric:tabular-nums;min-width:4ch}
+.timer small{font-size:13px;color:var(--doux)}
+
+/* Les preuves */
+.proofs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+.proofs div{padding:26px 22px 26px 0;display:grid;gap:8px;border-bottom:1px solid var(--line)}
+.proofs div+div{padding-left:22px;border-left:1px solid var(--line)}
+.proofs b{font-family:var(--disp);font-weight:300;font-size:30px;line-height:1.05}
+.proofs span{font-size:14px;color:var(--clair-dim)}
+.nope{margin-top:clamp(40px,5vw,64px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(20px,4vw,56px);align-items:start}
+.nope h3{font-size:28px;font-style:italic}
+.nope ul{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.nope li{padding-left:22px;position:relative;color:var(--clair-dim)}
+.nope li::before{content:'';position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--rose)}
+
+/* Liste d'attente */
+.wait{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,72px);align-items:end}
+.wait form{display:grid;gap:12px}
+.wait label{font-size:13px;color:var(--doux)}
+.field{display:flex;gap:8px;flex-wrap:wrap}
+.field input{flex:1 1 220px;min-height:52px;padding:0 16px;border:1px solid rgba(34,16,29,.4);background:#FCF7F8;color:var(--encre);font:16px var(--body)}
+.field input:focus{outline:2px solid var(--rose-d);outline-offset:1px}
+.solid{min-height:52px;padding:0 24px;border:1px solid var(--rose-d);background:var(--rose-d);color:#fff;font:500 12.5px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s}
+.solid:hover{background:transparent;color:var(--rose-d)}
+.legal{font-size:13px;color:var(--doux)}
+.ok{font-size:15px;color:var(--encre);border:1px solid var(--rose-d);padding:14px 16px}
+.facts{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:15px;color:var(--doux)}
+.facts b{color:var(--encre);font-weight:500}
+
+footer{padding-block:40px;border-top:1px solid var(--line);font-size:13px;color:var(--clair-dim);display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:space-between}
+
+@media (max-width:860px){
+  .nav ul{display:none}
+  .hero::after{background:linear-gradient(0deg,rgba(21,8,18,.96) 0%,rgba(21,8,18,.75) 38%,rgba(21,8,18,.1) 70%)}
+  .lights{position:relative;right:auto;bottom:auto;align-items:flex-start;padding-inline:clamp(16px,4vw,48px);padding-bottom:40px}
+  .lights__set{justify-content:flex-start}
+  .hero__body{padding-bottom:22px}
+  .ia{position:relative;left:auto;bottom:auto;padding:0 clamp(16px,4vw,48px) 18px;z-index:2}
+  .depth,.steps{grid-template-columns:1fr}
+  .gauge{height:120px}
+  .proofs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .proofs div:nth-child(3){padding-left:0;border-left:0}
+  .nope,.wait{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="proto">Maquette de travail. Ce n'est pas le site en ligne, rien n'est envoyé.</div>
+
+<header class="hero" aria-label="La Pénombre">
+  <canvas id="mask" aria-hidden="true"></canvas>
+  <div class="wrap nav">
+    <a class="logo" href="#top" id="top">La <em>Pénombre</em></a>
+    <ul>
+      <li><a href="#lumieres">Les lumières</a></li>
+      <li><a href="#rituel">Le rituel</a></li>
+      <li><a href="#preuves">Les preuves</a></li>
+      <li><a href="#attente">Liste d'attente</a></li>
+    </ul>
+  </div>
+  <div class="wrap hero__body">
+    <span class="kicker">Le masque du soir</span>
+    <h1>Dix minutes,<br><em>les yeux fermés.</em></h1>
+    <p class="hero__lead">Un masque LED en silicone souple, trois lumières, et rien d'autre à faire que de ne rien faire.</p>
+    <div class="hero__row">
+      <a class="ghost" href="#attente">Prévenez-moi à l'ouverture</a>
+      <p class="price">199&nbsp;€<small>Livraison offerte · 30 jours pour changer d'avis</small></p>
+    </div>
+  </div>
+  <div class="lights" role="group" aria-labelledby="lights-label">
+    <span class="lights__label" id="lights-label">Allumer le masque</span>
+    <div class="lights__set">
+      <button type="button" class="light-btn" data-mode="b" aria-pressed="false" style="--c:var(--led-b)"><i></i>Bleu</button>
+      <button type="button" class="light-btn" data-mode="r" aria-pressed="true" style="--c:var(--led-r)"><i></i>Rouge</button>
+      <button type="button" class="light-btn" data-mode="ir" aria-pressed="false" style="--c:var(--led-ir)"><i></i>Rouge + infrarouge</button>
+    </div>
+  </div>
+  <p class="ia">Illustration dessinée en code. Nos vraies photos arrivent avec notre exemplaire.</p>
+</header>
+
+<main>
+  <section class="s" id="lumieres" aria-labelledby="t-lum">
+    <div class="wrap">
+      <div class="s__head">
+        <span class="kicker">Les trois lumières</span>
+        <h2 id="t-lum">Plus l'onde est longue, <em>plus elle va loin.</em></h2>
+        <p>Chaque couleur entre dans la peau à sa propre profondeur. L'infrarouge s'allume avec le rouge et reste invisible à l'œil.</p>
+      </div>
+      <div class="depth">
+        <div class="dcol">
+          <div class="gauge" style="--c:var(--led-b);--d:20%"><span class="gauge__beam"></span><span class="gauge__tick" style="top:33%">1 mm</span><span class="gauge__tick" style="top:66%">2 mm</span></div>
+          <span class="nm">430 nm</span><h3>Bleu</h3><p>Reste en surface, à moins d'1&nbsp;mm.</p>
+        </div>
+        <div class="dcol">
+          <div class="gauge" style="--c:var(--led-r);--d:66%"><span class="gauge__beam"></span><span class="gauge__tick" style="top:33%">1 mm</span><span class="gauge__tick" style="top:66%">2 mm</span></div>
+          <span class="nm">630 nm</span><h3>Rouge</h3><p>Pénètre environ 2&nbsp;mm.</p>
+        </div>
+        <div class="dcol">
+          <div class="gauge" style="--c:var(--led-ir);--d:100%"><span class="gauge__beam"></span><span class="gauge__tick" style="top:33%">1 mm</span><span class="gauge__tick" style="top:66%">2 mm</span></div>
+          <span class="nm">850 nm</span><h3>Infrarouge proche</h3><p>Environ 3&nbsp;mm, sans rien de visible.</p>
+        </div>
+      </div>
+      <p class="note">Ordres de grandeur publiés par la recherche ; ils varient selon la peau.</p>
+    </div>
+  </section>
+
+  <section class="s lin" id="rituel" aria-labelledby="t-rit">
+    <div class="wrap">
+      <div class="s__head">
+        <span class="kicker">Le rituel</span>
+        <h2 id="t-rit">Trois gestes, <em>puis plus rien.</em></h2>
+      </div>
+      <ol class="steps">
+        <li><b>1</b><h3>Visage propre</h3><p>Nettoyez, séchez. Pas de crème avant.</p></li>
+        <li><b>2</b><h3>Une lumière</h3><p>Choisissez-la avec la télécommande, posez le masque.</p></li>
+        <li><b>3</b><h3>Les yeux fermés</h3><p>Dix minutes. Il s'éteint seul.</p></li>
+      </ol>
+      <div class="timer">
+        <span class="timer__t" id="timer-t">10:00</span>
+        <div class="timer__bar" aria-hidden="true"><span id="timer-bar"></span></div>
+        <button type="button" class="solid" id="timer-go">Essayer une minute</button>
+        <small id="timer-note">Une minute de pénombre, pour sentir le rythme.</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="s" id="preuves" aria-labelledby="t-pre">
+    <div class="wrap">
+      <div class="s__head">
+        <span class="kicker">Les preuves</span>
+        <h2 id="t-pre">Ce qui est mesuré, <em>écrit noir sur blanc.</em></h2>
+      </div>
+      <div class="proofs">
+        <div><b>Groupe exempt</b><span>Norme EN 62471, sécurité photobiologique</span></div>
+        <div><b>4 rapports</b><span>Lumière, batterie, électronique, matériaux</span></div>
+        <div><b>0 UV</b><span>Aucun ultraviolet émis</span></div>
+        <div><b>En France</b><span>Importateur et service client</span></div>
+      </div>
+      <div class="nope">
+        <h3>Ce que ce masque ne fait pas</h3>
+        <ul>
+          <li>Il ne remplace pas un soin médical ni l'avis d'un dermatologue.</li>
+          <li>Il ne promet pas de résultat en une semaine.</li>
+          <li>Il n'a pas encore d'avis clients : la boutique n'a pas ouvert.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="s lin" id="attente" aria-labelledby="t-att">
+    <div class="wrap wait">
+      <div>
+        <div class="s__head" style="margin-bottom:28px">
+          <span class="kicker">Liste d'attente</span>
+          <h2 id="t-att">Pas encore en vente. <em>Bientôt dans vos soirées.</em></h2>
+          <p>Laissez votre e-mail : on vous prévient à l'ouverture, avec nos vraies photos.</p>
+        </div>
+        <form id="wl" novalidate>
+          <label for="wl-email">Adresse e-mail</label>
+          <div class="field">
+            <input id="wl-email" type="email" autocomplete="email" placeholder="vous@exemple.fr" required>
+            <button class="solid" type="submit">Prévenez-moi</button>
+          </div>
+          <p class="legal" id="wl-msg">Deux e-mails avant l'ouverture, pas plus. Désinscription en un clic.</p>
+        </form>
+      </div>
+      <ul class="facts">
+        <li><b>199 €</b>, ou 3 × 66,33 € environ avec Klarna</li>
+        <li><b>Livraison offerte</b> et suivie</li>
+        <li><b>30 jours</b> après réception pour changer d'avis</li>
+        <li><b>Peter vous répond</b> : contact@lapenombre.fr</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<div class="wrap"><footer><span>La Pénombre · le rituel du soir</span><span>Maquette du 30 septembre 2026</span></footer></div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Le masque dessiné en LED ---------- */
+  var cv = document.getElementById('mask'), ctx = cv.getContext('2d');
+  var COLORS = { b:[111,141,240], r:[226,70,63], ir:[185,40,61] };
+  var mode = 'r', dots = [], W = 0, H = 0, dpr = 1, start = 0, raf = 0, sprite = null;
+
+  function makeSprite(rgb){
+    var s = document.createElement('canvas'), n = 48; s.width = s.height = n;
+    var g = s.getContext('2d'), gr = g.createRadialGradient(n/2,n/2,0,n/2,n/2,n/2);
+    gr.addColorStop(0,'rgba(255,240,235,1)');
+    gr.addColorStop(.12,'rgba('+rgb+',1)');
+    gr.addColorStop(.4,'rgba('+rgb+',.35)');
+    gr.addColorStop(1,'rgba('+rgb+',0)');
+    g.fillStyle = gr; g.fillRect(0,0,n,n); return s;
+  }
+
+  function inside(x,y,cx,cy,rx,ry){
+    var fx=(x-cx)/rx, fy=(y-cy)/ry;
+    var chin = fy>0 ? fx/(1-fy*.28) : fx;
+    if (chin*chin + fy*fy > 1) return false;
+    function hole(hx,hy,a,b){var u=(x-(cx+hx*rx))/(a*rx),v=(y-(cy+hy*ry))/(b*ry);return u*u+v*v<1;}
+    if (hole(-.38,-.18,.2,.09) || hole(.38,-.18,.2,.09)) return false;   /* yeux */
+    if (hole(0,.14,.1,.09)) return false;                                /* nez */
+    if (hole(0,.52,.26,.07)) return false;                               /* bouche */
+    return true;
+  }
+
+  function layout(){
+    var r = cv.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio||1, 2);
+    W = r.width; H = r.height;
+    cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var narrow = W < 860;
+    var ry = narrow ? H*.3 : H*.36, rx = ry*.72;
+    var cx = narrow ? W*.5 : W*.66, cy = narrow ? H*.34 : H*.5;
+    var step = Math.max(7, Math.round(ry/26));
+    dots = [];
+    for (var y = cy-ry; y <= cy+ry; y += step){
+      for (var x = cx-rx; x <= cx+rx; x += step){
+        if (inside(x,y,cx,cy,rx,ry)){
+          var d = Math.hypot((x-cx)/rx,(y-cy)/ry);
+          dots.push({x:x,y:y,d:d,j:Math.random()*.25});
+        }
+      }
+    }
+    dots.size = step;
+  }
+
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    var rgb = COLORS[mode].join(','), size = dots.size*2.6;
+    ctx.globalCompositeOperation = 'lighter';
+    var p = reduce ? 1 : Math.min(1,(t-start)/2600), done = true;
+    for (var i=0;i<dots.length;i++){
+      var o = dots[i], k = (p*1.35 - o.d*.9 - o.j);
+      k = k<0 ? 0 : (k>.35 ? 1 : k/.35);
+      if (k<1) done = false;
+      var a = .08 + .92*k;
+      ctx.globalAlpha = a;
+      ctx.drawImage(sprite, o.x-size/2, o.y-size/2, size, size);
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    return done;
+  }
+
+  function loop(t){ if (!draw(t)) raf = requestAnimationFrame(loop); }
+
+  function light(m){
+    mode = m; sprite = makeSprite(COLORS[m].join(','));
+    cancelAnimationFrame(raf); start = performance.now();
+    if (reduce) draw(start); else raf = requestAnimationFrame(loop);
+  }
+
+  document.querySelectorAll('.light-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.light-btn').forEach(function(x){ x.setAttribute('aria-pressed', x===b ? 'true':'false'); });
+      light(b.getAttribute('data-mode'));
+    });
+  });
+
+  var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ layout(); draw(performance.now()+1e5); }, 120); });
+  layout(); light('r');
+
+  /* ---------- Une minute de pénombre ---------- */
+  var go = document.getElementById('timer-go'), tt = document.getElementById('timer-t'),
+      bar = document.getElementById('timer-bar'), note = document.getElementById('timer-note'), iv = 0;
+  function fmt(s){ var m = Math.floor(s/60), r = s%60; return m + ':' + (r<10?'0':'') + r; }
+  go.addEventListener('click', function(){
+    if (iv){ clearInterval(iv); iv = 0; tt.textContent='10:00'; bar.style.setProperty('--p',1); go.textContent='Essayer une minute'; note.textContent='Une minute de pénombre, pour sentir le rythme.'; return; }
+    var left = 60; tt.textContent = fmt(left); bar.style.setProperty('--p',1);
+    go.textContent = 'Arrêter'; note.textContent = 'Fermez les yeux. Le masque compterait pour vous.';
+    iv = setInterval(function(){
+      left--; tt.textContent = fmt(left); bar.style.setProperty('--p', left/60);
+      if (left<=0){ clearInterval(iv); iv = 0; go.textContent='Recommencer'; note.textContent='Voilà une minute. La séance en dure dix, puis le masque s\'éteint seul.'; }
+    }, 1000);
+  });
+
+  /* ---------- Liste d'attente (maquette : rien n'est envoyé) ---------- */
+  var form = document.getElementById('wl'), email = document.getElementById('wl-email'), msg = document.getElementById('wl-msg');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!email.value || !email.checkValidity()){
+      email.setAttribute('aria-invalid','true');
+      msg.textContent = 'Cette adresse e-mail ne semble pas valide. Vérifiez le @ et le domaine.';
+      email.focus(); return;
+    }
+    email.removeAttribute('aria-invalid');
+    form.innerHTML = '<p class="ok" role="status">C\'est noté pour ' + email.value.replace(/[<>&"]/g,'') + '. Sur le vrai site, votre inscription rejoindra la liste d\'attente Shopify.</p>';
+  });
+})();
+</script>

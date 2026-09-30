@@ -1,0 +1,295 @@
+{{ 'penombre.css' | asset_url | stylesheet_tag }}
+{{ 'penombre-cinema.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Accueil « cinéma » (30/09/2026), transposé de la maquette validée par Peter.
+  Hero plein cadre en vidéo (boucle muette), puis 5 temps : les lumières, le rituel,
+  les preuves, les questions, la liste d'attente. Peu de texte par écran.
+  Vidéos : fichiers de Contenu > Fichiers, lus par nom (file_url).
+  Le script choisit la plus légère sur téléphone, et garde l'image fixe si
+  « réduire les animations » ou « économie de données » est actif.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign wl_done = false
+  assign price_txt = ''
+  if p != blank
+    assign price_txt = p.price | money_without_currency | remove: ',00'
+  endif
+  assign vid_desk = ''
+  assign vid_mob = ''
+  if section.settings.video_desktop != blank
+    assign vid_desk = section.settings.video_desktop | file_url
+  endif
+  if section.settings.video_mobile != blank
+    assign vid_mob = section.settings.video_mobile | file_url
+  endif
+-%}
+<div class='pc' id='pc-{{ section.id }}'>
+
+  <section class='pc-hero' aria-labelledby='pc-h1-{{ section.id }}'>
+    <div class='pc-hero__media'>
+      {%- if section.settings.poster != blank -%}
+        {{ section.settings.poster | image_url: width: 1800 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '640,960,1280,1800', sizes: '100vw', alt: section.settings.poster_alt, class: 'pc-hero__poster' }}
+      {%- endif -%}
+      {%- if vid_desk != blank or vid_mob != blank -%}
+        <video class='pc-hero__video' muted loop playsinline preload='none' aria-hidden='true'
+          data-src-desk='{{ vid_desk | default: vid_mob }}' data-src-mob='{{ vid_mob | default: vid_desk }}'></video>
+      {%- endif -%}
+    </div>
+    <div class='pc-hero__veil' aria-hidden='true'></div>
+    <div class='pc-w pc-hero__body'>
+      <span class='pc-kicker'>{{ section.settings.kicker | escape }}</span>
+      <h1 id='pc-h1-{{ section.id }}' class='pc-hero__title'>{{ section.settings.heading }}</h1>
+      <p class='pc-hero__lead'>{{ section.settings.lead | escape }}</p>
+      <div class='pc-hero__row'>
+        {%- if p != blank and p.available -%}
+          <a class='pc-ghost' href='{{ p.url }}'>{{ section.settings.cta_buy | escape }}</a>
+        {%- else -%}
+          <a class='pc-ghost' href='#attente'>{{ section.settings.cta_wait | escape }}</a>
+        {%- endif -%}
+        {%- if price_txt != blank -%}
+          <p class='pc-price'>{{ price_txt }}&nbsp;&euro;<small>{{ section.settings.price_note | escape }}</small></p>
+        {%- endif -%}
+      </div>
+    </div>
+    {%- if section.settings.ia_note != blank -%}<p class='pc-ia'>{{ section.settings.ia_note | escape }}</p>{%- endif -%}
+  </section>
+
+  <section class='pc-s' id='lumieres' aria-labelledby='pc-lum-{{ section.id }}'>
+    <div class='pc-w'>
+      <div class='pc-head'>
+        <span class='pc-kicker'>{{ section.settings.lum_kicker | escape }}</span>
+        <h2 id='pc-lum-{{ section.id }}'>{{ section.settings.lum_heading }}</h2>
+        <p>{{ section.settings.lum_text | escape }}</p>
+      </div>
+      <div class='pc-depth'>
+        <div class='pc-dcol'>
+          <div class='pc-gauge' style='--c:#6F8DF0;--d:20%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
+          <span class='pc-nm'>430 nm</span><h3>Bleu</h3><p>Reste en surface, à moins d'1&nbsp;mm.</p>
+        </div>
+        <div class='pc-dcol'>
+          <div class='pc-gauge' style='--c:#E2463F;--d:66%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
+          <span class='pc-nm'>630 nm</span><h3>Rouge</h3><p>Pénètre environ 2&nbsp;mm.</p>
+        </div>
+        <div class='pc-dcol'>
+          <div class='pc-gauge' style='--c:#B9283D;--d:100%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
+          <span class='pc-nm'>850 nm</span><h3>Infrarouge proche</h3><p>Environ 3&nbsp;mm, sans rien de visible : il s'allume avec le rouge.</p>
+        </div>
+      </div>
+      <p class='pc-note'>Ordres de grandeur publiés par la recherche ; ils varient selon la peau.</p>
+    </div>
+  </section>
+
+  <section class='pc-s pc-lin' id='rituel' aria-labelledby='pc-rit-{{ section.id }}'>
+    <div class='pc-w'>
+      <div class='pc-head'>
+        <span class='pc-kicker'>{{ section.settings.rit_kicker | escape }}</span>
+        <h2 id='pc-rit-{{ section.id }}'>{{ section.settings.rit_heading }}</h2>
+      </div>
+      <ol class='pc-steps'>
+        <li><b>1</b><h3>{{ section.settings.step_1_title | escape }}</h3><p>{{ section.settings.step_1_text | escape }}</p></li>
+        <li><b>2</b><h3>{{ section.settings.step_2_title | escape }}</h3><p>{{ section.settings.step_2_text | escape }}</p></li>
+        <li><b>3</b><h3>{{ section.settings.step_3_title | escape }}</h3><p>{{ section.settings.step_3_text | escape }}</p></li>
+      </ol>
+      <div class='pc-timer'>
+        <span class='pc-timer__t' data-timer-t>10:00</span>
+        <div class='pc-timer__bar' aria-hidden='true'><span data-timer-bar></span></div>
+        <button type='button' class='pc-solid' data-timer-go>Essayer une minute</button>
+        <small data-timer-note aria-live='polite'>Une minute de pénombre, pour sentir le rythme.</small>
+      </div>
+    </div>
+  </section>
+
+  <section class='pc-s' id='preuves' aria-labelledby='pc-pre-{{ section.id }}'>
+    <div class='pc-w'>
+      <div class='pc-head'>
+        <span class='pc-kicker'>{{ section.settings.pre_kicker | escape }}</span>
+        <h2 id='pc-pre-{{ section.id }}'>{{ section.settings.pre_heading }}</h2>
+      </div>
+      <div class='pc-proofs'>
+        {%- for i in (1..4) -%}
+          {%- liquid
+            case i
+              when 1
+                assign pt = section.settings.proof_1_title
+                assign px = section.settings.proof_1_text
+              when 2
+                assign pt = section.settings.proof_2_title
+                assign px = section.settings.proof_2_text
+              when 3
+                assign pt = section.settings.proof_3_title
+                assign px = section.settings.proof_3_text
+              else
+                assign pt = section.settings.proof_4_title
+                assign px = section.settings.proof_4_text
+            endcase
+          -%}
+          {%- if pt != blank -%}<div><b>{{ pt | escape }}</b><span>{{ px | escape }}</span></div>{%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- if section.settings.nolie_heading != blank -%}
+        <div class='pc-nolie'>
+          <h3>{{ section.settings.nolie_heading | escape }}</h3>
+          <p>{{ section.settings.nolie_text | escape }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- assign has_faq = false -%}
+  {%- for block in section.blocks -%}{%- if block.type == 'faq' -%}{%- assign has_faq = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
+  {%- if has_faq -%}
+  <section class='pc-s pc-faq' aria-labelledby='pc-faq-{{ section.id }}'>
+    <div class='pc-w pc-faq__grid'>
+      <div class='pc-head'>
+        <span class='pc-kicker'>{{ section.settings.faq_kicker | escape }}</span>
+        <h2 id='pc-faq-{{ section.id }}'>{{ section.settings.faq_heading }}</h2>
+      </div>
+      <div>
+        {%- for block in section.blocks -%}{%- if block.type == 'faq' -%}
+          <details {{ block.shopify_attributes }}><summary>{{ block.settings.question | escape }}</summary><div class='pc-ans rte'>{{ block.settings.answer }}</div></details>
+        {%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+  </section>
+  {%- endif -%}
+
+  <section class='pc-s pc-lin' id='attente' aria-labelledby='pc-att-{{ section.id }}'>
+    <div class='pc-w pc-wait'>
+      <div>
+        <div class='pc-head'>
+          <span class='pc-kicker'>{{ section.settings.wait_kicker | escape }}</span>
+          <h2 id='pc-att-{{ section.id }}'>{{ section.settings.wait_heading }}</h2>
+          <p>{{ section.settings.wait_text | escape }}</p>
+        </div>
+        {%- form 'customer', id: 'wl-home' -%}
+          {%- if form.posted_successfully? -%}
+            <p class='pc-ok' role='status' tabindex='-1'>{{ section.settings.wait_ok | escape }}</p>
+          {%- else -%}
+            <input type='hidden' name='contact[tags]' value='liste-attente,masque-du-soir'>
+            <label for='wl-email-{{ section.id }}'>Adresse e-mail</label>
+            <div class='pc-field'>
+              <input id='wl-email-{{ section.id }}' type='email' name='contact[email]' value='{{ form.email | escape }}' required autocomplete='email' autocapitalize='off' spellcheck='false' placeholder='vous@exemple.fr'{% if form.errors %} aria-invalid='true' aria-describedby='wl-err-{{ section.id }}'{% endif %}>
+              <button class='pc-solid' type='submit'>{{ section.settings.wait_cta | escape }}</button>
+            </div>
+            {%- if form.errors -%}<p class='pc-err' id='wl-err-{{ section.id }}' role='alert'>Cette adresse e-mail ne semble pas valide. Vérifiez le @ et le domaine.</p>{%- endif -%}
+            <p class='pc-legal'>{{ section.settings.wait_legal | escape }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+      <ul class='pc-facts'>
+        {%- if price_txt != blank -%}<li><b>{{ price_txt }}&nbsp;&euro;</b>{{ section.settings.fact_pay | escape }}</li>{%- endif -%}
+        {%- if section.settings.fact_1 != blank -%}<li>{{ section.settings.fact_1 | escape }}</li>{%- endif -%}
+        {%- if section.settings.fact_2 != blank -%}<li>{{ section.settings.fact_2 | escape }}</li>{%- endif -%}
+        {%- if section.settings.fact_3 != blank -%}<li>{{ section.settings.fact_3 | escape }}</li>{%- endif -%}
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var root = document.getElementById('pc-{{ section.id }}');
+  if (!root) return;
+  var mq = function(q){ return window.matchMedia ? window.matchMedia(q).matches : false; };
+  var reduce = mq('(prefers-reduced-motion: reduce)');
+  var save = !!(navigator.connection && navigator.connection.saveData);
+
+  /* Vidéo du hero : chargée seulement si utile, la plus légère sur téléphone. */
+  var v = root.querySelector('.pc-hero__video');
+  if (v && !reduce && !save) {
+    var src = mq('(max-width: 749px)') ? v.getAttribute('data-src-mob') : v.getAttribute('data-src-desk');
+    if (src) {
+      v.src = src;
+      v.addEventListener('playing', function(){ v.classList.add('is-on'); }, { once: true });
+      var pr = v.play(); if (pr && pr.catch) pr.catch(function(){});
+    }
+  }
+
+  /* Une minute de pénombre. */
+  var go = root.querySelector('[data-timer-go]'), tt = root.querySelector('[data-timer-t]'),
+      bar = root.querySelector('[data-timer-bar]'), note = root.querySelector('[data-timer-note]'), iv = 0;
+  var INIT = 'Une minute de pénombre, pour sentir le rythme.';
+  function fmt(s){ var m = Math.floor(s/60), r = s%60; return m + ':' + (r < 10 ? '0' : '') + r; }
+  if (go) go.addEventListener('click', function(){
+    if (iv) { clearInterval(iv); iv = 0; tt.textContent = '10:00'; bar.style.setProperty('--p', 1); go.textContent = 'Essayer une minute'; note.textContent = INIT; return; }
+    var left = 60; tt.textContent = fmt(left); bar.style.setProperty('--p', 1);
+    go.textContent = 'Arrêter'; note.textContent = 'Fermez les yeux. Le masque compterait pour vous.';
+    iv = setInterval(function(){
+      left--; tt.textContent = fmt(left); bar.style.setProperty('--p', left / 60);
+      if (left <= 0) { clearInterval(iv); iv = 0; go.textContent = 'Recommencer'; note.textContent = 'Voilà une minute. La séance en dure dix, puis le masque s’éteint seul.'; }
+    }, 1000);
+  });
+
+  /* Après une inscription, la page se recharge : on amène le message à l'écran. */
+  if (/[?&]customer_posted=true/.test(location.search)) {
+    var ok = root.querySelector('.pc-ok');
+    if (ok) { ok.scrollIntoView({ block: 'center' }); try { ok.focus({ preventScroll: true }); } catch (e) {} }
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Accueil cinéma",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Produit (prix, lien)" },
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "poster", "label": "Image fixe (affichée avant et à la place de la vidéo)" },
+    { "type": "text", "id": "poster_alt", "label": "Description de l'image", "default": "Le masque posé sur une table de chevet, le soir" },
+    { "type": "text", "id": "video_desktop", "label": "Vidéo ordinateur : nom du fichier (Contenu > Fichiers)", "default": "masque-du-soir-chevet-rouge.mp4" },
+    { "type": "text", "id": "video_mobile", "label": "Vidéo téléphone : nom du fichier, plus léger", "default": "masque-du-soir-draps-bleu.mp4" },
+    { "type": "text", "id": "kicker", "label": "Surtitre", "default": "Le masque du soir" },
+    { "type": "html", "id": "heading", "label": "Titre (em = italique vieux rose)", "default": "Dix minutes,<br><em>les yeux fermés.</em>" },
+    { "type": "textarea", "id": "lead", "label": "Phrase sous le titre", "default": "Un masque LED en silicone souple, trois lumières, et rien d'autre à faire que de ne rien faire." },
+    { "type": "text", "id": "cta_wait", "label": "Bouton (pas encore en vente)", "default": "Prévenez-moi à l'ouverture" },
+    { "type": "text", "id": "cta_buy", "label": "Bouton (en vente)", "default": "Découvrir le masque" },
+    { "type": "text", "id": "price_note", "label": "Sous le prix", "default": "Livraison offerte · 30 jours pour changer d'avis" },
+    { "type": "text", "id": "ia_note", "label": "Mention IA (vide = masquée)", "default": "Vidéo créée par IA, en attendant nos propres images." },
+    { "type": "header", "content": "Les lumières" },
+    { "type": "text", "id": "lum_kicker", "label": "Surtitre", "default": "Les trois lumières" },
+    { "type": "html", "id": "lum_heading", "label": "Titre", "default": "Plus l'onde est longue, <em>plus elle va loin.</em>" },
+    { "type": "textarea", "id": "lum_text", "label": "Texte", "default": "Chaque couleur entre dans la peau à sa propre profondeur. L'infrarouge s'allume avec le rouge et reste invisible à l'œil." },
+    { "type": "header", "content": "Le rituel" },
+    { "type": "text", "id": "rit_kicker", "label": "Surtitre", "default": "Le rituel" },
+    { "type": "html", "id": "rit_heading", "label": "Titre", "default": "Trois gestes. <em>Le dernier, c'est ne plus rien faire.</em>" },
+    { "type": "text", "id": "step_1_title", "label": "Geste 1", "default": "Visage propre" },
+    { "type": "textarea", "id": "step_1_text", "label": "Geste 1 : texte", "default": "Démaquillé, séché, sans crème. Votre soin habituel viendra après." },
+    { "type": "text", "id": "step_2_title", "label": "Geste 2", "default": "Vous choisissez la lumière" },
+    { "type": "textarea", "id": "step_2_text", "label": "Geste 2 : texte", "default": "Bleu, rouge, ou rouge et infrarouge. Vous posez le masque, vous fermez les yeux." },
+    { "type": "text", "id": "step_3_title", "label": "Geste 3", "default": "Vous ne faites plus rien" },
+    { "type": "textarea", "id": "step_3_text", "label": "Geste 3 : texte", "default": "Dix minutes. Il s'éteint seul. Votre lampe peut rester allumée." },
+    { "type": "header", "content": "Les preuves" },
+    { "type": "text", "id": "pre_kicker", "label": "Surtitre", "default": "Les preuves" },
+    { "type": "html", "id": "pre_heading", "label": "Titre", "default": "Ce qui est mesuré, <em>écrit noir sur blanc.</em>" },
+    { "type": "text", "id": "proof_1_title", "label": "Preuve 1", "default": "Groupe exempt" },
+    { "type": "text", "id": "proof_1_text", "label": "Preuve 1 : détail", "default": "Norme EN 62471, sécurité photobiologique" },
+    { "type": "text", "id": "proof_2_title", "label": "Preuve 2", "default": "4 rapports" },
+    { "type": "text", "id": "proof_2_text", "label": "Preuve 2 : détail", "default": "De laboratoire, envoyés sur demande" },
+    { "type": "text", "id": "proof_3_title", "label": "Preuve 3", "default": "Aucun UV" },
+    { "type": "text", "id": "proof_3_text", "label": "Preuve 3 : détail", "default": "Le masque n'en émet pas" },
+    { "type": "text", "id": "proof_4_title", "label": "Preuve 4", "default": "En France" },
+    { "type": "text", "id": "proof_4_text", "label": "Preuve 4 : détail", "default": "Importé par La Pénombre" },
+    { "type": "text", "id": "nolie_heading", "label": "Encadré : titre (vide = masqué)", "default": "Pas de prix barré. Pas de promesse chiffrée. Pas d'avis inventé." },
+    { "type": "textarea", "id": "nolie_text", "label": "Encadré : texte" },
+    { "type": "header", "content": "Questions" },
+    { "type": "text", "id": "faq_kicker", "label": "Surtitre", "default": "Vos questions" },
+    { "type": "html", "id": "faq_heading", "label": "Titre", "default": "Ce que vous vous demandez <em>sans doute.</em>" },
+    { "type": "header", "content": "Liste d'attente" },
+    { "type": "text", "id": "wait_kicker", "label": "Surtitre", "default": "Liste d'attente" },
+    { "type": "html", "id": "wait_heading", "label": "Titre", "default": "Pas encore en vente. <em>Bientôt dans vos soirées.</em>" },
+    { "type": "textarea", "id": "wait_text", "label": "Texte", "default": "Laissez votre e-mail : on vous prévient à l'ouverture, avec nos vraies photos." },
+    { "type": "text", "id": "wait_cta", "label": "Bouton", "default": "Prévenez-moi" },
+    { "type": "text", "id": "wait_ok", "label": "Confirmation", "default": "C'est noté. Premier e-mail dès l'arrivée de notre exemplaire, avec ses vraies photos." },
+    { "type": "text", "id": "wait_legal", "label": "Mention sous le formulaire", "default": "En vous inscrivant, vous acceptez de recevoir nos e-mails : deux avant l'ouverture, pas plus. Désinscription en un clic." },
+    { "type": "text", "id": "fact_pay", "label": "Après le prix", "default": ", ou 3 × 66,33 € environ avec Klarna" },
+    { "type": "text", "id": "fact_1", "label": "Fait 1", "default": "Livraison offerte et suivie, en 3 à 4 semaines" },
+    { "type": "text", "id": "fact_2", "label": "Fait 2", "default": "30 jours après réception pour changer d'avis" },
+    { "type": "text", "id": "fact_3", "label": "Fait 3", "default": "Peter vous répond : contact@lapenombre.fr, sous 48 h ouvrées" }
+  ],
+  "blocks": [
+    { "type": "faq", "name": "Question", "settings": [ { "type": "text", "id": "question", "label": "Question" }, { "type": "richtext", "id": "answer", "label": "Réponse" } ] }
+  ],
+  "presets": [{ "name": "Accueil cinéma" }]
+}
+{% endschema %}

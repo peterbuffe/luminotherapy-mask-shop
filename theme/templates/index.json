@@ -1,0 +1,65 @@
+{
+ "sections": {
+  "cinema": {
+   "type": "penombre-cinema",
+   "blocks": {
+    "f2": {
+     "type": "faq",
+     "settings": {
+      "question": "Qu'est-ce que vous pouvez en attendre ?",
+      "answer": "<p>Dix minutes de calme, le soir. Pour votre peau, nous ne promettons rien, et nous refusons d'afficher un chiffre que personne n'a mesuré pour lui.</p>"
+     }
+    },
+    "f4": {
+     "type": "faq",
+     "settings": {
+      "question": "Est-il sans fil ?",
+      "answer": "<p>Non. Un câble d'environ un mètre relie le masque à la télécommande, qui contient la batterie. Vous la posez à côté de vous : aucune prise murale pendant la séance. Elle se recharge en USB-C, comme votre téléphone.</p>"
+     }
+    },
+    "f3": {
+     "type": "faq",
+     "settings": {
+      "question": "Et pour vos yeux ?",
+      "answer": "<p>Le masque a été évalué selon la norme EN 62471 (sécurité photobiologique) et classé en groupe exempt, la catégorie la plus basse. Il n'émet pas d'UV. Gardez quand même les yeux fermés pendant toute la séance, et si vous prenez un médicament photosensibilisant, demandez l'avis de votre médecin avant de l'utiliser.</p>"
+     }
+    },
+    "f6": {
+     "type": "faq",
+     "settings": {
+      "question": "Pourquoi 3 à 4 semaines de livraison ?",
+      "answer": "<p>Parce que chaque masque part directement de chez son fabricant, sans passer par un entrepôt. Comptez 1 à 3 jours ouvrés de préparation, puis 15 à 17 jours ouvrés de transport. C'est long, et nous préférons vous le dire avant votre commande qu'après.</p><p>Livraison offerte en France métropolitaine. Une inquiétude en route ? Écrivez à <a href=\"mailto:contact@lapenombre.fr\">contact@lapenombre.fr</a>.</p>"
+     }
+    },
+    "f7": {
+     "type": "faq",
+     "settings": {
+      "question": "Et si ça ne vous plaît pas ?",
+      "answer": "<p>Vous avez 30 jours après réception pour changer d'avis, sans vous justifier. Écrivez à <a href=\"mailto:contact@lapenombre.fr\">contact@lapenombre.fr</a> : nous vous répondons sous 48 h ouvrées avec l'adresse de retour.</p><p>Le renvoi est à votre charge ; si le masque arrive défectueux ou abîmé, nous prenons tout en charge. Vous êtes remboursée au plus tard 14 jours après nous avoir informés de votre décision ; nous pouvons attendre d'avoir reçu le masque ou la preuve de son envoi.</p>"
+     }
+    }
+   },
+   "block_order": [
+    "f2",
+    "f4",
+    "f3",
+    "f6",
+    "f7"
+   ],
+   "settings": {
+    "product": "le-masque-du-soir-masque-led-visage-rouge-et-infrarouge",
+    "poster": "shopify://shop_images/hf_20260930_214433_b8a44f38-15db-42f0-9e9d-39db7ab4fd62.png",
+    "poster_alt": "Le masque posé sur une table de chevet en lin, le soir",
+    "nolie_text": "199 €, c'est le vrai prix : il n'a jamais été gonflé pour être barré. Ce n'est pas un appareil médical, et nous ne promettons rien à votre peau : le fabricant n'a mené aucun essai clinique sur ce modèle. Ce que nous vendons : dix minutes de calme, le soir, et des documents que vous pouvez lire."
+   }
+  },
+  "palette": {
+   "type": "penombre-palette",
+   "settings": {}
+  }
+ },
+ "order": [
+  "cinema",
+  "palette"
+ ]
+}
