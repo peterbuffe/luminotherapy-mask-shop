@@ -33,3 +33,21 @@
 - **Cookies :** vérifier que la bannière Shopify Customer Privacy est active.
 - **Nettoyage :** `selynera.css`, `selynera-live-totals.js`, `mask-blobs.css`, `sparkle.gif` et les icônes Dawn inutilisées. Retirer les `!important` devenus inutiles dans `penombre-palette`.
 - **Thèmes non publiés :** une vingtaine d'anciennes versions, à trier.
+
+## Animations aux points de décision (30/09, copie `la-penombre-16 (audit)`)
+
+Les animations existantes sont conservées : « la lumière baisse », lueur du titre, points de couleur, parallaxe, frise `#etat`, coche de confirmation. S'y ajoutent `assets/penombre-motion.css` et `assets/penombre-motion.js`, chargés par `penombre-palette` :
+
+| Endroit | Effet | Pourquoi |
+|---------|-------|----------|
+| Hero, carte d'offre | Arrive 0,35 s après le titre (fondu et montée de 12 px) | Le titre accroche, puis l'offre prend le relais |
+| Hero, bouton « Prévenez-moi » | 2 halos vieux rose à 2,7 s, une fois par visite | Guide le regard vers l'action à la fin de « la lumière baisse » |
+| Fiche produit, bouton de la liste d'attente | 2 halos à 1,4 s | Point de conversion principal de la fiche |
+| Barre mobile | 1 halo sur le bouton à sa première apparition | Signale la nouvelle action disponible |
+| Boutons d'action | Montée de 1 px au survol, légère pression à l'appui | Retour immédiat au toucher et au clic |
+| Réassurance, caractéristiques, pastilles, points clés | Arrivée en cascade (70 ms d'écart), une fois | Attire l'œil sur les preuves de confiance |
+
+- Aucune boucle infinie.
+- Tout est coupé si « réduire les animations » est actif.
+- Sans JavaScript, rien n'est caché.
+- Une liste déjà visible à l'écran au chargement n'est pas masquée.

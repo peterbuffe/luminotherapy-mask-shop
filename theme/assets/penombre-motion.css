@@ -1,0 +1,65 @@
+/* ==========================================================
+   La Pénombre : animations aux points de décision (30/09/2026).
+   Chargée par la section penombre-palette, avec penombre-motion.js.
+   Règles (UI/UX Pro Max) : 150 à 400 ms, décalage de 8 à 12 px, jamais de boucle,
+   chaque effet joué une fois. Tout est coupé si « réduire les animations » est actif.
+   Les états « caché avant l'animation » n'existent que sous html.pn-motion,
+   posé par le script : sans lui, tout reste visible.
+   ========================================================== */
+
+@keyframes pn-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pn-halo{
+  0%{box-shadow:0 0 0 0 rgba(204,152,166,.55)}
+  100%{box-shadow:0 0 0 16px rgba(204,152,166,0)}
+}
+
+/* ---------- 1. Hero : l'offre arrive juste après le titre, puis son bouton s'éclaire une fois ---------- */
+/* Titre lisible tout de suite (inchangé) ; la carte suit à 0,35 s. */
+#MainContent .hero .offers{animation:pn-rise .4s cubic-bezier(.2,.7,.2,1) .35s both}
+/* Après « la lumière baisse » (2,4 s), deux halos sur le bouton pour guider le regard. */
+#MainContent .hero .offer--main .offer__cta{animation:pn-halo 1.1s ease-out 2.7s 2}
+/* Visite déjà faite dans la session : pas de rejeu, comme l'arrivée du hero. */
+html.pn-dusk-done #MainContent .hero .offers,
+html.pn-dusk-done #MainContent .hero .offer--main .offer__cta{animation:none}
+
+/* ---------- 2. Boutons d'action : réponse au survol et à l'appui ---------- */
+#MainContent .pn-btn,
+#MainContent .offer--main,
+#MainContent .buybar__cta{transition:background .18s ease,color .18s ease,transform .15s ease,border-color .18s ease}
+@media (hover:hover){
+  #MainContent .pn-btn:hover,
+  #MainContent .offer--main:hover{transform:translateY(-1px)}
+}
+#MainContent .pn-btn:active,
+#MainContent .offer--main:active,
+#MainContent .buybar__cta:active{transform:scale(.98)}
+
+/* ---------- 3. Barre mobile : son bouton s'éclaire la première fois qu'elle apparaît ---------- */
+#MainContent .buybar.is-first .buybar__cta,
+#MainContent .buybar.is-first .pn-btn{animation:pn-halo 1.1s ease-out .3s 1}
+
+/* ---------- 4. Fiche produit : le bouton « Prévenez-moi » s'éclaire une fois après l'arrivée ---------- */
+#MainContent .pp__wait .pn-btn{animation:pn-halo 1.1s ease-out 1.4s 2}
+
+/* ---------- 5. Preuves et caractéristiques : elles arrivent l'une après l'autre ---------- */
+html.pn-motion #MainContent [data-pn-stagger]>*{opacity:0;transform:translateY(8px);
+  transition:opacity .35s ease-out,transform .35s ease-out;transition-delay:calc(var(--pn-i,0) * 70ms)}
+html.pn-motion #MainContent [data-pn-stagger].is-in>*{opacity:1;transform:none}
+
+/* ---------- Réduire les animations ---------- */
+@media (prefers-reduced-motion:reduce){
+  #MainContent .hero .offers,
+  #MainContent .hero .offer--main .offer__cta,
+  #MainContent .buybar.is-first .buybar__cta,
+  #MainContent .buybar.is-first .pn-btn,
+  #MainContent .pp__wait .pn-btn{animation:none}
+  #MainContent .pn-btn,
+  #MainContent .offer--main,
+  #MainContent .buybar__cta{transition:none}
+  #MainContent .pn-btn:hover,
+  #MainContent .offer--main:hover,
+  #MainContent .pn-btn:active,
+  #MainContent .offer--main:active,
+  #MainContent .buybar__cta:active{transform:none}
+  html.pn-motion #MainContent [data-pn-stagger]>*{opacity:1;transform:none;transition:none}
+}
