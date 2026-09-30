@@ -24,6 +24,25 @@
     assign vid_mob = section.settings.video_mobile | file_url
   endif
 -%}
+<style>
+  /* Formulaire du hero */
+  #pc-{{ section.id }} .pc-hero__row{align-items:flex-end}
+  #pc-{{ section.id }} .pc-hform{display:flex;flex-wrap:wrap;gap:8px;width:min(100%,560px)}
+  #pc-{{ section.id }} .pc-hform input[type=email]{flex:1 1 220px;min-height:48px;padding:0 16px;border:1px solid rgba(246,235,239,.55);border-radius:0;background:rgba(21,8,18,.35);color:var(--pn-clair);font:16px var(--pn-body)}
+  #pc-{{ section.id }} .pc-hform input[type=email]::placeholder{color:rgba(246,235,239,.6)}
+  #pc-{{ section.id }} .pc-hform input[type=email]:focus{outline:2px solid var(--pn-chair);outline-offset:1px}
+  #pc-{{ section.id }} .pc-hform input[aria-invalid=true]{border-color:#F0B4A0}
+  #pc-{{ section.id }} .pc-hok{padding:12px 16px;border:1px solid var(--pn-chair);color:var(--pn-clair);max-width:44ch}
+
+  /* En-tête transparent au-dessus de la vidéo, prune dès qu'on fait défiler.
+     La section remonte sous l'en-tête de sa hauteur (--pc-head, mesurée par le script en bas de la section). */
+  body:has(#pc-{{ section.id }}) .header-wrapper.header-wrapper.header-wrapper{background:transparent !important;border-bottom-color:transparent;transition:background .35s ease}
+  html.pc-scrolled body:has(#pc-{{ section.id }}) .header-wrapper.header-wrapper.header-wrapper{background:var(--pn-profond) !important;border-bottom-color:var(--pn-line-dark)}
+  #pc-{{ section.id }} .pc-hero{margin-top:calc(-1 * var(--pc-head, 0px));padding-top:var(--pc-head, 0px)}
+  @media (prefers-reduced-motion:reduce){
+    body:has(#pc-{{ section.id }}) .header-wrapper.header-wrapper.header-wrapper{transition:none}
+  }
+</style>
 <div class='pc' id='pc-{{ section.id }}'>
 
   <section class='pc-hero' aria-labelledby='pc-h1-{{ section.id }}'>
@@ -45,7 +64,17 @@
         {%- if p != blank and p.available -%}
           <a class='pc-ghost' href='{{ p.url }}'>{{ section.settings.cta_buy | escape }}</a>
         {%- else -%}
-          <a class='pc-ghost' href='#attente'>{{ section.settings.cta_wait | escape }}</a>
+          {%- comment -%} Inscription directe depuis le hero : mêmes tags que la liste d'attente du bas et de la fiche. {%- endcomment -%}
+          {%- form 'customer', id: 'wl-hero', class: 'pc-hform' -%}
+            {%- if form.posted_successfully? -%}
+              <p class='pc-hok' role='status'>{{ section.settings.wait_ok | escape }}</p>
+            {%- else -%}
+              <input type='hidden' name='contact[tags]' value='liste-attente,masque-du-soir'>
+              <label for='wl-hero-{{ section.id }}' class='visually-hidden'>Adresse e-mail</label>
+              <input id='wl-hero-{{ section.id }}' type='email' name='contact[email]' required autocomplete='email' autocapitalize='off' spellcheck='false' placeholder='Votre adresse e-mail'{% if form.errors %} aria-invalid='true'{% endif %}>
+              <button class='pc-ghost' type='submit'>{{ section.settings.cta_wait | escape }}</button>
+            {%- endif -%}
+          {%- endform -%}
         {%- endif -%}
         {%- if price_txt != blank -%}
           <p class='pc-price'>{{ price_txt }}&nbsp;&euro;<small>{{ section.settings.price_note | escape }}</small></p>
@@ -206,6 +235,17 @@
     }
   }
 
+  /* En-tête transparent : on mesure sa hauteur, puis on le repasse en prune au défilement. */
+  var html = document.documentElement;
+  var head = document.querySelector('.section-header') || document.querySelector('.header-wrapper');
+  function measure(){ if (head) { var h = Math.round(head.getBoundingClientRect().height); if (h > 0 && h < 260) root.style.setProperty('--pc-head', h + 'px'); } }
+  var ticking = false;
+  function onScroll(){ if (ticking) return; ticking = true; requestAnimationFrame(function(){ ticking = false; html.classList.toggle('pc-scrolled', window.scrollY > 40); }); }
+  measure(); onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', measure, { passive: true });
+  window.addEventListener('load', measure);
+
   /* Une minute de pénombre. */
   var go = root.querySelector('[data-timer-go]'), tt = root.querySelector('[data-timer-t]'),
       bar = root.querySelector('[data-timer-bar]'), note = root.querySelector('[data-timer-note]'), iv = 0;
@@ -223,7 +263,7 @@
 
   /* Après une inscription, la page se recharge : on amène le message à l'écran. */
   if (/[?&]customer_posted=true/.test(location.search)) {
-    var ok = root.querySelector('.pc-ok');
+    var ok = root.querySelector('.pc-hok') || root.querySelector('.pc-ok');
     if (ok) { ok.scrollIntoView({ block: 'center' }); try { ok.focus({ preventScroll: true }); } catch (e) {} }
   }
 })();

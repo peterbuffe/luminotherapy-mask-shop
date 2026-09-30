@@ -65,3 +65,13 @@ Les animations existantes sont conservées : « la lumière baisse », lueur du 
 - **Hero, version couleurs (30/09) :** vidéos de 10 s où la lumière du masque passe du bleu au rouge puis au rouge profond, et revient à l'image de départ pour boucler sans saut.
   - Ordinateur : `masque-du-soir-couleurs-ordinateur.mp4` (16:9, 7,1 Mo).
   - Téléphone : `masque-du-soir-couleurs-telephone.mp4` (9:16, 7,8 Mo).
+
+## Parcours d'achat « cinéma » (30/09, thème `la-penombre-17 (cinema)`)
+
+- **Accueil :**
+  - **En-tête transparent** au-dessus de la vidéo du hero, qui repasse en prune dès 40 px de défilement. La règle est limitée aux pages qui contiennent la section cinéma (`body:has(#pc-…)`).
+  - **Inscription directe dans le hero :** formulaire `customer`, identifiant `wl-hero`, mêmes tags `liste-attente,masque-du-soir`. Le bouton « Découvrir le masque » réapparaît dès que le produit est en vente.
+- **Fiche produit :** `templates/product.json` enchaîne `main` → `film` → `lumieres` → `palette`.
+  - `sections/penombre-film.liquid` : bande vidéo plein cadre, avec les vidéos de couleurs et une légende 430, 630 et 850 nm. La vidéo n'est chargée qu'à l'approche de la bande.
+  - `sections/penombre-lumieres.liquid` : la coupe des 3 lumières. La lumière « descend » à l'arrivée, une seule fois.
+  - `assets/penombre-cinema-product.css` : habillage du bloc d'achat (serif fine, angles nets). La mise en page ne change pas, et la liste d'attente, la barre mobile et la visionneuse restent intactes.

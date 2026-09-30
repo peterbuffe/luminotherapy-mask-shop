@@ -1,0 +1,72 @@
+{{ 'penombre-cinema.css' | asset_url | stylesheet_tag }}
+{{ 'penombre-cinema-product.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  Bande vidéo plein cadre (30/09/2026), pour la fiche produit « cinéma ».
+  Vidéos de Contenu > Fichiers, lues par nom (file_url). Chargées seulement quand
+  la bande approche de l'écran ; image fixe si « réduire les animations » ou
+  « économie de données » est actif.
+{%- endcomment -%}
+{%- liquid
+  assign vid_desk = ''
+  assign vid_mob = ''
+  if section.settings.video_desktop != blank
+    assign vid_desk = section.settings.video_desktop | file_url
+  endif
+  if section.settings.video_mobile != blank
+    assign vid_mob = section.settings.video_mobile | file_url
+  endif
+-%}
+<section class='pc pc-film' id='pf-{{ section.id }}' aria-labelledby='pf-t-{{ section.id }}'>
+  <div class='pc-film__media'>
+    {%- if section.settings.poster != blank -%}
+      {{ section.settings.poster | image_url: width: 1800 | image_tag: loading: 'lazy', widths: '640,960,1280,1800', sizes: '100vw', alt: '', class: 'pc-film__poster' }}
+    {%- endif -%}
+    {%- if vid_desk != blank or vid_mob != blank -%}
+      <video class='pc-film__video' muted loop playsinline preload='none' aria-hidden='true'
+        data-src-desk='{{ vid_desk | default: vid_mob }}' data-src-mob='{{ vid_mob | default: vid_desk }}'></video>
+    {%- endif -%}
+  </div>
+  <div class='pc-film__veil' aria-hidden='true'></div>
+  <div class='pc-w pc-film__body'>
+    <span class='pc-kicker'>{{ section.settings.kicker | escape }}</span>
+    <h2 id='pf-t-{{ section.id }}' class='pc-film__title'>{{ section.settings.heading }}</h2>
+    <p class='pc-film__legend'><span style='--c:#6F8DF0'>Bleu 430 nm</span><span style='--c:#E2463F'>Rouge 630 nm</span><span style='--c:#B9283D'>Infrarouge 850 nm</span></p>
+  </div>
+  {%- if section.settings.ia_note != blank -%}<p class='pc-ia'>{{ section.settings.ia_note | escape }}</p>{%- endif -%}
+</section>
+
+<script>
+(function(){
+  var root = document.getElementById('pf-{{ section.id }}');
+  if (!root) return;
+  var v = root.querySelector('.pc-film__video');
+  var mq = function(q){ return window.matchMedia ? window.matchMedia(q).matches : false; };
+  if (!v || mq('(prefers-reduced-motion: reduce)') || (navigator.connection && navigator.connection.saveData)) return;
+  function start(){
+    var src = mq('(max-width: 749px)') ? v.getAttribute('data-src-mob') : v.getAttribute('data-src-desk');
+    if (!src || v.src) return;
+    v.src = src;
+    v.addEventListener('playing', function(){ v.classList.add('is-on'); }, { once: true });
+    var pr = v.play(); if (pr && pr.catch) pr.catch(function(){});
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){ if (es[0].isIntersecting) { start(); io.disconnect(); } }, { rootMargin: '300px 0px' });
+    io.observe(root);
+  } else { start(); }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Bande vidéo",
+  "settings": [
+    { "type": "image_picker", "id": "poster", "label": "Image fixe" },
+    { "type": "text", "id": "video_desktop", "label": "Vidéo ordinateur : nom du fichier (Contenu > Fichiers)", "default": "masque-du-soir-couleurs-ordinateur.mp4" },
+    { "type": "text", "id": "video_mobile", "label": "Vidéo téléphone : nom du fichier", "default": "masque-du-soir-couleurs-telephone.mp4" },
+    { "type": "text", "id": "kicker", "label": "Surtitre", "default": "Trois lumières, un seul masque" },
+    { "type": "html", "id": "heading", "label": "Titre (em = italique vieux rose)", "default": "Vous choisissez la couleur. <em>Il s'occupe du reste.</em>" },
+    { "type": "text", "id": "ia_note", "label": "Mention IA (vide = masquée)", "default": "Vidéo créée par IA, en attendant nos propres images." }
+  ],
+  "presets": [{ "name": "Bande vidéo" }]
+}
+{% endschema %}

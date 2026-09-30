@@ -1,0 +1,58 @@
+{{ 'penombre-cinema.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  « Les trois lumières » (30/09/2026) : coupe de peau, profondeur de chaque longueur d'onde.
+  Même bloc que l'accueil cinéma, en section autonome pour la fiche produit.
+  La lumière « descend » dans la coupe quand on arrive dessus (une fois).
+{%- endcomment -%}
+<section class='pc pc-s pc-lum' id='pl-{{ section.id }}' aria-labelledby='pl-t-{{ section.id }}'>
+  <div class='pc-w'>
+    <div class='pc-head'>
+      <span class='pc-kicker'>{{ section.settings.kicker | escape }}</span>
+      <h2 id='pl-t-{{ section.id }}'>{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.text | escape }}</p>
+    </div>
+    <div class='pc-depth'>
+      <div class='pc-dcol'>
+        <div class='pc-gauge' style='--c:#6F8DF0;--d:20%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
+        <span class='pc-nm'>430 nm</span><h3>Bleu</h3><p>Reste en surface, à moins d'1&nbsp;mm.</p>
+      </div>
+      <div class='pc-dcol'>
+        <div class='pc-gauge' style='--c:#E2463F;--d:66%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
+        <span class='pc-nm'>630 nm</span><h3>Rouge</h3><p>Pénètre environ 2&nbsp;mm.</p>
+      </div>
+      <div class='pc-dcol'>
+        <div class='pc-gauge' style='--c:#B9283D;--d:100%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
+        <span class='pc-nm'>850 nm</span><h3>Infrarouge proche</h3><p>Environ 3&nbsp;mm, sans rien de visible : il s'allume avec le rouge.</p>
+      </div>
+    </div>
+    <p class='pc-note'>Ordres de grandeur publiés par la recherche ; ils varient selon la peau.</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  var root = document.getElementById('pl-{{ section.id }}');
+  if (!root || !('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var g = root.querySelector('.pc-depth');
+  /* Déjà à l'écran : rien ne se cache. Sinon, la lumière descend à l'arrivée. */
+  if (g.getBoundingClientRect().top < (window.innerHeight || 800)) return;
+  g.classList.add('is-armed');
+  var io = new IntersectionObserver(function(es){
+    if (es[0].isIntersecting) { g.classList.add('is-in'); io.disconnect(); }
+  }, { threshold: 0.35 });
+  io.observe(g);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Les trois lumières",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Surtitre", "default": "Les trois lumières" },
+    { "type": "html", "id": "heading", "label": "Titre (em = italique vieux rose)", "default": "Plus l'onde est longue, <em>plus elle va loin.</em>" },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Chaque couleur entre dans la peau à sa propre profondeur. L'infrarouge s'allume avec le rouge et reste invisible à l'œil." }
+  ],
+  "presets": [{ "name": "Les trois lumières" }]
+}
+{% endschema %}

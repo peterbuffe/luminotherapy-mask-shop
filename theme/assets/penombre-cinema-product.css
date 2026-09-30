@@ -1,0 +1,50 @@
+/* ==========================================================
+   La Pénombre : fiche produit habillée au style « cinéma » (30/09/2026).
+   Chargée par sections/penombre-film.liquid, placée juste après le bloc d'achat.
+   Ne touche qu'à la typographie, aux bords et aux boutons, jamais à la mise en page :
+   la galerie, la visionneuse, la liste d'attente et la barre mobile restent celles de
+   penombre-product. Préfixe #MainContent .pp : passe devant les styles #pp-… de la section.
+   ========================================================== */
+
+/* Titre et prix en serif fine, comme le hero de l'accueil */
+#MainContent .pp .pp__title{font-family:var(--pn-disp);font-weight:300;letter-spacing:-.015em;line-height:1}
+#MainContent .pp .pp__price{font-family:var(--pn-disp);font-weight:300;letter-spacing:-.01em}
+#MainContent .pp .pp__pitch{font-family:var(--pn-disp);font-style:italic;font-weight:300;font-size:2.2rem;line-height:1.3;color:var(--pn-clair)}
+
+/* Angles nets : boutons, champ, pastilles, cadres photo */
+#MainContent .pp .pn-btn{border-radius:0;min-height:52px;letter-spacing:.18em}
+#MainContent .pp .pp__wait input[type=email]{border-radius:0;background:transparent}
+#MainContent .pp .pp__waitok{border-radius:0}
+#MainContent .pp .pp__proofs a{border-radius:0}
+#MainContent .pp .pp__gallery .ph,#MainContent .pp .pp__shot{border-radius:0}
+
+/* Sections claires de la fiche : titres en serif fine, italique vieux rose */
+#MainContent .pp .pn__title{font-weight:300;letter-spacing:-.015em}
+#MainContent .pp .pn__title em{font-style:italic;color:var(--pn-chair-d)}
+
+/* ---------- Bande vidéo ---------- */
+.pc-film{position:relative;min-height:clamp(440px,72svh,760px);display:flex;align-items:flex-end;overflow:hidden;background:var(--pn-profond)}
+.pc-film__media{position:absolute;inset:0}
+.pc-film__poster,.pc-film__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.pc-film__video{opacity:0;transition:opacity 1.2s ease}
+.pc-film__video.is-on{opacity:1}
+.pc-film__veil{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(21,8,18,.9) 0%,rgba(21,8,18,.35) 45%,rgba(21,8,18,.1) 100%)}
+.pc-film__body{position:relative;z-index:2;width:100%;padding-block:0 clamp(40px,6vw,80px);display:grid;gap:18px;justify-items:start}
+.pc-film__title{font-size:clamp(34px,5vw,64px);line-height:1.02;max-width:18ch}
+.pc-film__title em{font-style:italic;color:var(--pn-chair)}
+.pc-film__legend{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--pn-clair-dim)}
+.pc-film__legend span{display:inline-flex;align-items:center;gap:8px}
+.pc-film__legend span::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+@media (max-width:860px){
+  .pc-film .pc-ia{left:clamp(16px,4vw,48px);right:auto;top:14px;bottom:auto}
+}
+
+/* ---------- Coupe des lumières : la lumière descend à l'arrivée ---------- */
+.pc-depth.is-armed .pc-gauge__beam{height:0;transition:height 1.1s cubic-bezier(.2,.7,.2,1)}
+.pc-depth.is-armed .pc-dcol:nth-child(2) .pc-gauge__beam{transition-delay:.15s}
+.pc-depth.is-armed .pc-dcol:nth-child(3) .pc-gauge__beam{transition-delay:.3s}
+.pc-depth.is-armed.is-in .pc-gauge__beam{height:var(--d)}
+
+@media (prefers-reduced-motion:reduce){
+  .pc-film__video,.pc-depth.is-armed .pc-gauge__beam{transition:none}
+}
