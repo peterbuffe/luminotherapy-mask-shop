@@ -1,0 +1,72 @@
+/* ==========================================================
+   La Pénombre : corrections de l'audit design du 30/09/2026 (UI/UX Pro Max).
+   Chargée en dernier, par la section penombre-palette.
+   Le préfixe #MainContent passe devant les styles des sections,
+   y compris ceux écrits en #pp-…, sans recourir à !important.
+   Base rem du thème = 10px : 1.2rem = 12px, 1.6rem = 16px.
+   ========================================================== */
+
+/* ---------- 1. Tailles de texte : 12 px minimum, 16 px pour le texte courant ---------- */
+#MainContent .pn__eyebrow{font-size:1.2rem}
+#MainContent .offer__tag{font-size:1.15rem}
+#MainContent .ticker__t{font-size:1.2rem}
+#MainContent .pp__pay span,
+#MainContent .buybar__txt span{font-size:1.2rem}
+#MainContent .pp__waitlegal,
+#MainContent .pn-ia-note{font-size:1.2rem}
+#MainContent .pp__note{font-size:1.3rem}
+#MainContent .pn__lead{font-size:clamp(1.6rem,1.2vw,1.75rem)}
+/* 16 px dans le champ e-mail : iOS ne zoome plus la page au toucher. */
+#MainContent .pp__wait input[type=email]{font-size:1.6rem}
+
+@media (max-width:749px){
+  #MainContent .pn__lead{font-size:1.6rem}
+  #MainContent .pp__usp li{font-size:1.5rem}
+  #MainContent .pp__reassure li{font-size:1.35rem}
+  #MainContent .step p,
+  #MainContent .ps__card p{font-size:1.45rem}
+  #MainContent .slide__cap,
+  #MainContent .trust__grid span{font-size:1.35rem}
+  #MainContent .offer__note{font-size:1.3rem}
+  #MainContent .hero__how{font-size:1.4rem}
+  #MainContent .chip{font-size:1.25rem}
+  #MainContent .quick__i span{font-size:1.2rem}
+  #MainContent .specs li span:first-child{font-size:1.15rem}
+}
+
+/* ---------- 2. L'appel à l'action du hero devient un vrai bouton ---------- */
+#MainContent .offer__cta{justify-content:center;min-height:48px;margin-top:1.2rem;padding:0 2rem;
+  border-radius:var(--pn-r);background:var(--pn-chair);color:var(--pn-profond);
+  font-size:1.3rem;letter-spacing:.12em;transition:background .18s ease}
+#MainContent .offer:hover .offer__cta{background:var(--pn-clair)}
+@media (max-width:749px){
+  #MainContent .offer__cta{margin-top:1rem;font-size:1.25rem;letter-spacing:.1em}
+}
+
+/* ---------- 3. Contour de focus visible au clavier, sur fond clair comme sombre ---------- */
+#MainContent .pn :focus-visible{outline:2px solid var(--pn-chair-d);outline-offset:3px;box-shadow:none}
+#MainContent .dark :focus-visible,
+#MainContent .hero :focus-visible,
+#MainContent .quick :focus-visible,
+#MainContent .prod :focus-visible,
+#MainContent .slider :focus-visible,
+#MainContent .trust :focus-visible,
+#MainContent .gift__box :focus-visible,
+#MainContent .buybar :focus-visible{outline-color:var(--pn-chair)}
+
+/* ---------- 4. Contrastes ---------- */
+/* « Sous réserve d'acceptation par Klarna » : 4,0:1 → 7:1 environ. */
+#MainContent .pp__pay span{color:rgba(244,237,228,.7)}
+#MainContent .pp__waitlegal{color:rgba(244,237,228,.68)}
+/* Bordure du champ e-mail : 2,4:1 → au-dessus de 3:1 (WCAG 1.4.11). */
+#MainContent .pp__wait input[type=email]{border-color:rgba(244,237,228,.55)}
+
+/* ---------- 5. Cibles tactiles de 44 px ---------- */
+#MainContent .pp__proofs a{min-height:44px}
+
+/* ---------- 6. Bloc avis : le « 0 » ne doit pas être la vedette ---------- */
+#MainContent .pavis__n{font-size:clamp(4rem,5vw,5.6rem)}
+
+@media (prefers-reduced-motion:reduce){
+  #MainContent .offer__cta{transition:none}
+}
