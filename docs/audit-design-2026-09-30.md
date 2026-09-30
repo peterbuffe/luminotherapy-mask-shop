@@ -75,3 +75,8 @@ Les animations existantes sont conservées : « la lumière baisse », lueur du 
   - `sections/penombre-film.liquid` : bande vidéo plein cadre, avec les vidéos de couleurs et une légende 430, 630 et 850 nm. La vidéo n'est chargée qu'à l'approche de la bande.
   - `sections/penombre-lumieres.liquid` : la coupe des 3 lumières. La lumière « descend » à l'arrivée, une seule fois.
   - `assets/penombre-cinema-product.css` : habillage du bloc d'achat (serif fine, angles nets). La mise en page ne change pas, et la liste d'attente, la barre mobile et la visionneuse restent intactes.
+- **Schéma des 3 lumières retiré de la fiche produit (30/09, demande de Peter : « je ne vois pas l'utilité ») :**
+  - La figure `.pv__lum` est retirée de `snippets/penombre-preuves.liquid`.
+  - La section `penombre-lumieres` est retirée de `templates/product.json` ; elle faisait doublon avec la figure.
+  - Les longueurs d'onde restent dites dans les points clés et dans la FAQ.
+  - La section `lumieres` de l'accueil cinéma est en attente de décision.
