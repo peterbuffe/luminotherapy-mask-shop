@@ -62,3 +62,6 @@ Les animations existantes sont conservées : « la lumière baisse », lueur du 
   - Image fixe si « réduire les animations » ou « économie de données » est actif.
 - **Parcours :** 5 temps (lumières, rituel avec minuteur d'une minute, preuves avec l'encadré « Pas de prix barré… », 5 questions, liste d'attente). La liste d'attente enregistre les inscrits avec les tags `liste-attente,masque-du-soir`, comme la fiche produit.
 - **Aperçu :** https://lapenombre.fr/?preview_theme_id=209007411531
+- **Hero, version couleurs (30/09) :** vidéos de 10 s où la lumière du masque passe du bleu au rouge puis au rouge profond, et revient à l'image de départ pour boucler sans saut.
+  - Ordinateur : `masque-du-soir-couleurs-ordinateur.mp4` (16:9, 7,1 Mo).
+  - Téléphone : `masque-du-soir-couleurs-telephone.mp4` (9:16, 7,8 Mo).
