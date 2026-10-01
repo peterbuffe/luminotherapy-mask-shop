@@ -69,7 +69,7 @@ Son : voix off calme, chuchotée. Aucune musique, ou une nappe très basse.
 
 **Problème (3-8 s) :** texte : « Le dimanche soir, la semaine arrive déjà dans la tête. »
 
-**Solution / démo (8-20 s) :** texte : « Bleu. Rouge. Rouge + infrarouge. On choisit. On ferme les yeux. »
+**Solution / démo (8-20 s) :** texte : « Bleu. Ou rouge + infrarouge. On choisit. On ferme les yeux. »
 
 **Preuve ou objection levée (20-27 s) :** texte : « Lumière évaluée selon la norme EN 62471 : groupe exempt. Aucun UV. »
 
@@ -80,8 +80,8 @@ Son : voix off calme, chuchotée. Aucune musique, ou une nappe très basse.
 **Notes de tournage :**
 1. Plan fixe en plongée sur un drap en lin, dans une pièce sombre. Le masque est posé dessus avant la 2e seconde.
 2. Le masque s'allume en bleu. Texte : « Bleu · 430 nm ».
-3. Il passe au rouge. Texte : « Rouge · 630 nm ».
-4. Il passe au rouge + infrarouge. Texte : « + infrarouge · 850 nm ».
+3. Il passe au rouge + infrarouge. Texte : « Rouge 630 nm + infrarouge 850 nm ».
+4. Plan large de la pièce baignée de rouge. Texte : « 10 minutes, puis il s'éteint seul ».
 5. La lumière s'éteint. Texte : « Groupe exempt EN 62471 · aucun UV ».
 6. Écran noir. Texte : « lapenombre.fr ».
 
@@ -175,6 +175,6 @@ Son : voix de Peter, naturelle, sans script lu.
 ## Points restés incertains (étape 0)
 
 - **Klarna en 3 fois :** à vérifier dans Shopify → Paramètres → Paiements avant de le citer dans une publicité. Aucun script ne le mentionne.
-- **Le rouge seul, sans infrarouge :** le fabricant indique que l'infrarouge est combiné au rouge. Le script 2 présente donc « Rouge » puis « Rouge + infrarouge » comme deux étapes ; à confirmer sur l'exemplaire avant de tourner, sinon garder seulement « Bleu » et « Rouge + infrarouge ».
+- **Le rouge seul, sans infrarouge :** le fabricant indique que l'infrarouge est combiné au rouge. Aucun script ne montre donc le rouge seul. Si l'exemplaire le permet, on pourra l'ajouter au script 2.
 - **La date d'ouverture :** inconnue. Aucun script n'en donne.
 - **Les sensations pendant la séance :** à décrire seulement après ton propre essai.
