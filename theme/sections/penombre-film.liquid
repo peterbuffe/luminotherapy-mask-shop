@@ -33,7 +33,17 @@
     <p class='pc-film__legend'><span style='--c:#6F8DF0'>Bleu 430 nm</span><span style='--c:#E2463F'>Rouge 630 nm</span><span style='--c:#B9283D'>Infrarouge 850 nm</span></p>
   </div>
   {%- if section.settings.ia_note != blank -%}<p class='pc-ia'>{{ section.settings.ia_note | escape }}</p>{%- endif -%}
+  <button type='button' class='pc-pause' hidden aria-pressed='false' aria-label='Mettre la vidéo en pause'><span class='pc-pause__i' aria-hidden='true'></span></button>
 </section>
+<style>
+  /* Bouton pause/lecture (WCAG 2.2.2), même dessin que le hero de l'accueil. */
+  #pf-{{ section.id }} .pc-pause{position:absolute;z-index:3;right:clamp(16px,4vw,48px);top:18px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(246,235,239,.55);background:rgba(21,8,18,.45);color:var(--pn-clair);display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s}
+  #pf-{{ section.id }} .pc-pause:hover{background:rgba(21,8,18,.75);border-color:var(--pn-clair)}
+  #pf-{{ section.id }} .pc-pause[hidden]{display:none}
+  #pf-{{ section.id }} .pc-pause__i{display:block;width:12px;height:14px;border-left:4px solid currentColor;border-right:4px solid currentColor}
+  #pf-{{ section.id }} .pc-pause[aria-pressed=true] .pc-pause__i{width:0;height:0;border:0;border-left:12px solid currentColor;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
+  #pf-{{ section.id }} .pc-ia{color:rgba(246,235,239,.78)}
+</style>
 
 <script>
 (function(){
@@ -42,16 +52,27 @@
   var v = root.querySelector('.pc-film__video');
   var mq = function(q){ return window.matchMedia ? window.matchMedia(q).matches : false; };
   if (!v || mq('(prefers-reduced-motion: reduce)') || (navigator.connection && navigator.connection.saveData)) return;
+  var btn = root.querySelector('.pc-pause'), userPaused = false;
+  function play(){ var pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); }
   function start(){
     var src = mq('(max-width: 749px)') ? v.getAttribute('data-src-mob') : v.getAttribute('data-src-desk');
     if (!src || v.src) return;
     v.src = src;
-    v.addEventListener('playing', function(){ v.classList.add('is-on'); }, { once: true });
-    var pr = v.play(); if (pr && pr.catch) pr.catch(function(){});
+    v.addEventListener('playing', function(){ v.classList.add('is-on'); btn.hidden = false; }, { once: true });
+    play();
   }
+  btn.addEventListener('click', function(){
+    userPaused = !v.paused;
+    if (userPaused) { v.pause(); } else { play(); }
+    btn.setAttribute('aria-pressed', userPaused ? 'true' : 'false');
+    btn.setAttribute('aria-label', userPaused ? 'Lire la vidéo' : 'Mettre la vidéo en pause');
+  });
+  /* Chargée à l'approche ; hors de l'écran elle s'arrête, et reprend au retour sauf pause volontaire. */
   if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function(es){ if (es[0].isIntersecting) { start(); io.disconnect(); } }, { rootMargin: '300px 0px' });
-    io.observe(root);
+    new IntersectionObserver(function(es){
+      if (es[0].isIntersecting) { if (!v.src) start(); else if (!userPaused) play(); }
+      else if (v.src) { v.pause(); }
+    }, { rootMargin: '300px 0px' }).observe(root);
   } else { start(); }
 })();
 </script>

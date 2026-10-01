@@ -2,8 +2,8 @@
 {{ 'penombre-cinema.css' | asset_url | stylesheet_tag }}
 {%- comment -%}
   Accueil « cinéma » (30/09/2026), transposé de la maquette validée par Peter.
-  Hero plein cadre en vidéo (boucle muette), puis 5 temps : les lumières, le rituel,
-  les preuves, les questions, la liste d'attente. Peu de texte par écran.
+  Hero plein cadre en vidéo (boucle muette), puis 4 temps : le rituel, les preuves,
+  les questions, la liste d'attente (« Les trois lumières » retiré le 01/10 à la demande de Peter). Peu de texte par écran.
   Vidéos : fichiers de Contenu > Fichiers, lus par nom (file_url).
   Le script choisit la plus légère sur téléphone, et garde l'image fixe si
   « réduire les animations » ou « économie de données » est actif.
@@ -42,6 +42,26 @@
   @media (prefers-reduced-motion:reduce){
     body:has(#pc-{{ section.id }}) .header-wrapper.header-wrapper.header-wrapper{transition:none}
   }
+
+  /* Revue UI/UX Pro Max (30/09) */
+  /* Haut de la vidéo assombri : le logo et le menu transparents restent lisibles. */
+  #pc-{{ section.id }} .pc-hero__veil{background:linear-gradient(180deg,rgba(21,8,18,.7) 0%,rgba(21,8,18,0) 24%),linear-gradient(90deg,rgba(21,8,18,.9) 0%,rgba(21,8,18,.55) 40%,rgba(21,8,18,.08) 70%),linear-gradient(0deg,rgba(21,8,18,.88) 0%,rgba(21,8,18,0) 45%)}
+  /* Bouton pause/lecture : toute vidéo en boucle doit pouvoir s'arrêter (WCAG 2.2.2). */
+  #pc-{{ section.id }} .pc-pause{position:absolute;z-index:3;right:clamp(16px,4vw,48px);bottom:44px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(246,235,239,.55);background:rgba(21,8,18,.45);color:var(--pn-clair);display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s}
+  #pc-{{ section.id }} .pc-pause:hover{background:rgba(21,8,18,.75);border-color:var(--pn-clair)}
+  #pc-{{ section.id }} .pc-pause[hidden]{display:none}
+  #pc-{{ section.id }} .pc-pause__i{display:block;width:12px;height:14px;border-left:4px solid currentColor;border-right:4px solid currentColor}
+  #pc-{{ section.id }} .pc-pause[aria-pressed=true] .pc-pause__i{width:0;height:0;border:0;border-left:12px solid currentColor;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
+  #pc-{{ section.id }} .pc-ia{color:rgba(246,235,239,.78)}
+  /* Erreur du formulaire du hero, sous le champ. */
+  #pc-{{ section.id }} .pc-herr{flex:1 0 100%;margin:0;font-size:14px;color:#F0B4A0}
+  /* Liens internes (#attente…) : défilement doux, titre jamais caché sous l'en-tête. */
+  #pc-{{ section.id }} [id]{scroll-margin-top:calc(var(--pc-head, 0px) + 16px)}
+  @media (prefers-reduced-motion:no-preference){ html:has(#pc-{{ section.id }}){scroll-behavior:smooth} }
+  @media (max-width:860px){
+    #pc-{{ section.id }} .pc-pause{top:calc(var(--pc-head, 0px) + 12px);bottom:auto}
+    #pc-{{ section.id }} .pc-ia{top:calc(var(--pc-head, 0px) + 22px)}
+  }
 </style>
 <div class='pc' id='pc-{{ section.id }}'>
 
@@ -71,8 +91,9 @@
             {%- else -%}
               <input type='hidden' name='contact[tags]' value='liste-attente,masque-du-soir'>
               <label for='wl-hero-{{ section.id }}' class='visually-hidden'>Adresse e-mail</label>
-              <input id='wl-hero-{{ section.id }}' type='email' name='contact[email]' required autocomplete='email' autocapitalize='off' spellcheck='false' placeholder='Votre adresse e-mail'{% if form.errors %} aria-invalid='true'{% endif %}>
+              <input id='wl-hero-{{ section.id }}' type='email' name='contact[email]' required autocomplete='email' autocapitalize='off' spellcheck='false' placeholder='Votre adresse e-mail'{% if form.errors %} aria-invalid='true' aria-describedby='wl-hero-err-{{ section.id }}'{% endif %}>
               <button class='pc-ghost' type='submit'>{{ section.settings.cta_wait | escape }}</button>
+              {%- if form.errors -%}<p class='pc-herr' id='wl-hero-err-{{ section.id }}' role='alert'>Cette adresse e-mail ne semble pas valide. Vérifiez le @ et le domaine.</p>{%- endif -%}
             {%- endif -%}
           {%- endform -%}
         {%- endif -%}
@@ -82,31 +103,7 @@
       </div>
     </div>
     {%- if section.settings.ia_note != blank -%}<p class='pc-ia'>{{ section.settings.ia_note | escape }}</p>{%- endif -%}
-  </section>
-
-  <section class='pc-s' id='lumieres' aria-labelledby='pc-lum-{{ section.id }}'>
-    <div class='pc-w'>
-      <div class='pc-head'>
-        <span class='pc-kicker'>{{ section.settings.lum_kicker | escape }}</span>
-        <h2 id='pc-lum-{{ section.id }}'>{{ section.settings.lum_heading }}</h2>
-        <p>{{ section.settings.lum_text | escape }}</p>
-      </div>
-      <div class='pc-depth'>
-        <div class='pc-dcol'>
-          <div class='pc-gauge' style='--c:#6F8DF0;--d:20%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
-          <span class='pc-nm'>430 nm</span><h3>Bleu</h3><p>Reste en surface, à moins d'1&nbsp;mm.</p>
-        </div>
-        <div class='pc-dcol'>
-          <div class='pc-gauge' style='--c:#E2463F;--d:66%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
-          <span class='pc-nm'>630 nm</span><h3>Rouge</h3><p>Pénètre environ 2&nbsp;mm.</p>
-        </div>
-        <div class='pc-dcol'>
-          <div class='pc-gauge' style='--c:#B9283D;--d:100%'><span class='pc-gauge__beam'></span><span class='pc-gauge__tick' style='top:33%'>1 mm</span><span class='pc-gauge__tick' style='top:66%'>2 mm</span></div>
-          <span class='pc-nm'>850 nm</span><h3>Infrarouge proche</h3><p>Environ 3&nbsp;mm, sans rien de visible : il s'allume avec le rouge.</p>
-        </div>
-      </div>
-      <p class='pc-note'>Ordres de grandeur publiés par la recherche ; ils varient selon la peau.</p>
-    </div>
+    <button type='button' class='pc-pause' hidden aria-pressed='false' aria-label='Mettre la vidéo en pause'><span class='pc-pause__i' aria-hidden='true'></span></button>
   </section>
 
   <section class='pc-s pc-lin' id='rituel' aria-labelledby='pc-rit-{{ section.id }}'>
@@ -230,8 +227,25 @@
     var src = mq('(max-width: 749px)') ? v.getAttribute('data-src-mob') : v.getAttribute('data-src-desk');
     if (src) {
       v.src = src;
-      v.addEventListener('playing', function(){ v.classList.add('is-on'); }, { once: true });
-      var pr = v.play(); if (pr && pr.catch) pr.catch(function(){});
+      var btn = root.querySelector('.pc-pause'), userPaused = false;
+      var play = function(){ var pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); };
+      var sync = function(paused){
+        btn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        btn.setAttribute('aria-label', paused ? 'Lire la vidéo' : 'Mettre la vidéo en pause');
+      };
+      v.addEventListener('playing', function(){ v.classList.add('is-on'); btn.hidden = false; }, { once: true });
+      btn.addEventListener('click', function(){
+        userPaused = !v.paused;
+        if (userPaused) { v.pause(); } else { play(); }
+        sync(userPaused);
+      });
+      /* Hors de l'écran, la vidéo s'arrête ; elle reprend au retour, sauf si le visiteur l'a mise en pause. */
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function(es){
+          if (es[0].isIntersecting) { if (!userPaused) play(); } else { v.pause(); }
+        }).observe(root.querySelector('.pc-hero'));
+      }
+      play();
     }
   }
 
@@ -286,7 +300,7 @@
     { "type": "text", "id": "cta_buy", "label": "Bouton (en vente)", "default": "Découvrir le masque" },
     { "type": "text", "id": "price_note", "label": "Sous le prix", "default": "Livraison offerte · 30 jours pour changer d'avis" },
     { "type": "text", "id": "ia_note", "label": "Mention IA (vide = masquée)", "default": "Vidéo créée par IA, en attendant nos propres images." },
-    { "type": "header", "content": "Les lumières" },
+    { "type": "header", "content": "Les lumières (bloc retiré, réglages non utilisés)" },
     { "type": "text", "id": "lum_kicker", "label": "Surtitre", "default": "Les trois lumières" },
     { "type": "html", "id": "lum_heading", "label": "Titre", "default": "Plus l'onde est longue, <em>plus elle va loin.</em>" },
     { "type": "textarea", "id": "lum_text", "label": "Texte", "default": "Chaque couleur entre dans la peau à sa propre profondeur. L'infrarouge s'allume avec le rouge et reste invisible à l'œil." },

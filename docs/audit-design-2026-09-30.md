@@ -80,3 +80,13 @@ Les animations existantes sont conservées : « la lumière baisse », lueur du 
   - La section `penombre-lumieres` est retirée de `templates/product.json` ; elle faisait doublon avec la figure.
   - Les longueurs d'onde restent dites dans les points clés et dans la FAQ.
   - La section `lumieres` de l'accueil cinéma est en attente de décision.
+- **« Les trois lumières » retiré aussi de l'accueil cinéma (01/10, accord de Peter) :** l'accueil enchaîne hero → rituel → preuves → questions → liste d'attente. Les réglages `lum_*` restent dans le schéma, sans être utilisés.
+
+## Revue UI/UX Pro Max (01/10, thème `la-penombre-17 (cinema)`)
+
+| Règle du skill | Problème | Correction |
+|----------------|----------|------------|
+| Vidéo en lecture automatique / contenu animé (WCAG 2.2.2, priorité haute) | Les vidéos en boucle n'avaient pas de bouton pause | Bouton pause/lecture de 44 px sur le hero et sur la bande vidéo. Arrêt hors de l'écran, reprise au retour sauf pause volontaire |
+| Emplacement de l'erreur (priorité haute) | Le formulaire du hero n'affichait aucun message d'erreur | Message sous le champ, relié par `aria-describedby`, annoncé avec `role="alert"` |
+| Contraste du texte | Logo et menu transparents sur le haut d'une vidéo claire | Dégradé sombre ajouté en haut du voile du hero ; mention IA passée de 60 % à 78 % d'opacité |
+| Défilement vers une ancre | `#attente` arrivait sous l'en-tête collant, sans transition | `scroll-margin-top` égal à la hauteur de l'en-tête, défilement doux sauf si « réduire les animations » est actif |
