@@ -1,0 +1,83 @@
+{{ 'penombre.css' | asset_url | stylesheet_tag }}
+{{ 'penombre-extra.css' | asset_url | stylesheet_tag }}
+{{ 'penombre-cinema.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'penombre-extra.js' | asset_url }}" defer></script>
+{%- comment -%}
+  Page secondaire au style « cinéma » (01/10/2026).
+  Sert les modèles page, page.contact, page.preuves, page.qui et page.suivi.
+  Avant le 01/10, les modèles page.preuves, page.qui et page.suivi n'existaient pas dans le thème :
+  Shopify retombait sur le modèle de base, et « Nos preuves » et « Qui vous répond », sans texte
+  dans l'admin, s'affichaient vides.
+  - Bandeau sombre : surtitre (réglage), titre de la page, phrase d'introduction (réglage).
+  - Texte de la page (Boutique en ligne > Pages), dans une colonne lisible, si la case est cochée.
+  - Bloc commun facultatif : les preuves, « Qui vous répond », et/ou la frise « Où nous en sommes ».
+{%- endcomment -%}
+<style>
+  #pg-{{ section.id }} .pg-head{background:var(--pn-profond);color:var(--pn-clair);padding-block:clamp(56px,9vw,120px) clamp(40px,6vw,72px)}
+  #pg-{{ section.id }} .pg-head .pc-w{display:grid;gap:18px;justify-items:start}
+  #pg-{{ section.id }} .pg-title{font-family:var(--pn-disp);font-weight:300;font-size:clamp(40px,6vw,76px);line-height:1;letter-spacing:-.015em;margin:0;color:var(--pn-clair);text-wrap:balance}
+  #pg-{{ section.id }} .pg-lead{margin:0;max-width:52ch;font-size:17px;line-height:1.6;color:var(--pn-clair-dim)}
+  #pg-{{ section.id }} .pg-body{background:var(--pn-lin);color:var(--pn-encre);padding-block:clamp(48px,7vw,96px)}
+  #pg-{{ section.id }} .pg-rte{max-width:68ch;font-family:var(--pn-body);font-size:16.5px;line-height:1.7;color:var(--pn-doux)}
+  #pg-{{ section.id }} .pg-rte>*+*{margin-top:1em}
+  #pg-{{ section.id }} .pg-rte h2,#pg-{{ section.id }} .pg-rte h3{font-family:var(--pn-disp);font-weight:400;color:var(--pn-encre);line-height:1.2;letter-spacing:-.01em;margin-top:2em}
+  #pg-{{ section.id }} .pg-rte h2{font-size:clamp(24px,2.6vw,30px)}
+  #pg-{{ section.id }} .pg-rte h3{font-size:20px}
+  #pg-{{ section.id }} .pg-rte strong{color:var(--pn-encre);font-weight:500}
+  #pg-{{ section.id }} .pg-rte a{color:var(--pn-chair-d);text-underline-offset:3px}
+  #pg-{{ section.id }} .pg-rte ul,#pg-{{ section.id }} .pg-rte ol{padding-left:1.3em}
+  #pg-{{ section.id }} .pg-rte li+li{margin-top:.4em}
+  #pg-{{ section.id }} .pg-rte table{width:100%;border-collapse:collapse;font-size:15px}
+  #pg-{{ section.id }} .pg-rte th,#pg-{{ section.id }} .pg-rte td{padding:10px 0;border-bottom:1px solid var(--pn-brume);text-align:left;vertical-align:top}
+  #pg-{{ section.id }} .pg-rte :focus-visible{outline:2px solid var(--pn-chair-d);outline-offset:3px}
+  @media (prefers-reduced-motion:no-preference){
+    #pg-{{ section.id }} .pg-head .pc-w>*{animation:pg-rise .6s cubic-bezier(.2,.7,.2,1) both}
+    #pg-{{ section.id }} .pg-head .pc-w>:nth-child(2){animation-delay:.08s}
+    #pg-{{ section.id }} .pg-head .pc-w>:nth-child(3){animation-delay:.16s}
+  }
+  @keyframes pg-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+</style>
+<div id='pg-{{ section.id }}'>
+  <header class='pg-head'>
+    <div class='pc-w'>
+      {%- if section.settings.kicker != blank -%}<span class='pc-kicker'>{{ section.settings.kicker | escape }}</span>{%- endif -%}
+      <h1 class='pg-title'>{{ page.title | escape }}</h1>
+      {%- if section.settings.lead != blank -%}<p class='pg-lead'>{{ section.settings.lead | escape }}</p>{%- endif -%}
+    </div>
+  </header>
+
+  {%- if section.settings.show_content and page.content != blank -%}
+    <div class='pg-body'>
+      <div class='pc-w'><div class='pg-rte rte'>{{ page.content }}</div></div>
+    </div>
+  {%- endif -%}
+
+  {%- case section.settings.block -%}
+    {%- when 'preuves' -%}
+      {% render 'penombre-preuves' %}
+    {%- when 'qui' -%}
+      {% render 'penombre-qui', photo: section.settings.qui_photo %}
+  {%- endcase -%}
+  {%- if section.settings.show_etat -%}
+    {% render 'penombre-etat' %}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Page La Pénombre",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Surtitre", "default": "La Pénombre" },
+    { "type": "textarea", "id": "lead", "label": "Phrase d'introduction (vide = masquée)" },
+    { "type": "checkbox", "id": "show_content", "label": "Afficher le texte de la page", "info": "Le texte se modifie dans Boutique en ligne > Pages.", "default": true },
+    { "type": "select", "id": "block", "label": "Bloc commun sous le texte", "default": "none", "options": [
+      { "value": "none", "label": "Aucun" },
+      { "value": "preuves", "label": "Les preuves (rapports de laboratoire)" },
+      { "value": "qui", "label": "Qui vous répond" }
+    ] },
+    { "type": "image_picker", "id": "qui_photo", "label": "Photo de Peter (bloc « Qui vous répond »)", "info": "Uniquement une vraie photo. Vide : un cercle avec l'initiale P." },
+    { "type": "checkbox", "id": "show_etat", "label": "Afficher la frise « Où nous en sommes »", "default": false }
+  ],
+  "presets": [{ "name": "Page La Pénombre" }]
+}
+{% endschema %}

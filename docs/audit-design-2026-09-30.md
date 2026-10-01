@@ -90,3 +90,20 @@ Les animations existantes sont conservées : « la lumière baisse », lueur du 
 | Emplacement de l'erreur (priorité haute) | Le formulaire du hero n'affichait aucun message d'erreur | Message sous le champ, relié par `aria-describedby`, annoncé avec `role="alert"` |
 | Contraste du texte | Logo et menu transparents sur le haut d'une vidéo claire | Dégradé sombre ajouté en haut du voile du hero ; mention IA passée de 60 % à 78 % d'opacité |
 | Défilement vers une ancre | `#attente` arrivait sous l'en-tête collant, sans transition | `scroll-margin-top` égal à la hauteur de l'en-tête, défilement doux sauf si « réduire les animations » est actif |
+
+## Pages secondaires (01/10, thème `la-penombre-17 (cinema)`)
+
+- **Bug trouvé (présent aussi sur le thème en ligne) :** les pages « Nos preuves » (`page.preuves`), « Qui vous répond » (`page.qui`) et « Suivi de commande » (`page.suivi`) demandent des modèles absents du thème. Shopify retombe sur `page.json`. « Nos preuves » et « Qui vous répond », sans texte dans l'admin, s'affichent donc vides.
+- **Nouvelle section `sections/penombre-page.liquid` :**
+  - bandeau prune avec surtitre, titre de la page en serif fine et phrase d'introduction ;
+  - texte de la page dans une colonne de 68 caractères ;
+  - au choix, le bloc commun des preuves ou de « Qui vous répond », et la frise « Où nous en sommes ».
+- **Modèles :**
+
+| Modèle | Page | Contenu |
+|--------|------|---------|
+| `page.json` | Mentions légales et autres pages | Texte de la page |
+| `page.suivi.json` | Suivi de commande | Texte de la page |
+| `page.preuves.json` | Nos preuves | Bloc des preuves complet |
+| `page.qui.json` | Qui vous répond | Bloc « Qui vous répond » et frise |
+| `page.contact.json` | Contact | Texte de la page et formulaire de contact Dawn (schéma prune) |

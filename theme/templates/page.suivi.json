@@ -1,0 +1,19 @@
+{
+ "sections": {
+  "main": {
+   "type": "penombre-page",
+   "settings": {
+    "kicker": "Votre commande",
+    "lead": "Préparée sous 1 à 3 jours ouvrés, puis suivie jusqu'à chez vous."
+   }
+  },
+  "palette": {
+   "type": "penombre-palette",
+   "settings": {}
+  }
+ },
+ "order": [
+  "main",
+  "palette"
+ ]
+}

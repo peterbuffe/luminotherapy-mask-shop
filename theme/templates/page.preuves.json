@@ -1,0 +1,21 @@
+{
+ "sections": {
+  "main": {
+   "type": "penombre-page",
+   "settings": {
+    "kicker": "Ce que nous pouvons prouver",
+    "lead": "Quatre rapports, deux laboratoires. Nous n'affichons que ce qu'ils ont écrit.",
+    "show_content": false,
+    "block": "preuves"
+   }
+  },
+  "palette": {
+   "type": "penombre-palette",
+   "settings": {}
+  }
+ },
+ "order": [
+  "main",
+  "palette"
+ ]
+}

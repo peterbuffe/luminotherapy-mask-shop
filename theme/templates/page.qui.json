@@ -1,0 +1,21 @@
+{
+ "sections": {
+  "main": {
+   "type": "penombre-page",
+   "settings": {
+    "kicker": "La Pénombre",
+    "show_content": false,
+    "block": "qui",
+    "show_etat": true
+   }
+  },
+  "palette": {
+   "type": "penombre-palette",
+   "settings": {}
+  }
+ },
+ "order": [
+  "main",
+  "palette"
+ ]
+}
