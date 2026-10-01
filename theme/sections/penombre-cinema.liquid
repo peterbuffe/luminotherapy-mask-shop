@@ -58,7 +58,14 @@
   /* Liens internes (#attente…) : défilement doux, titre jamais caché sous l'en-tête. */
   #pc-{{ section.id }} [id]{scroll-margin-top:calc(var(--pc-head, 0px) + 16px)}
   @media (prefers-reduced-motion:no-preference){ html:has(#pc-{{ section.id }}){scroll-behavior:smooth} }
+  /* Bande de réassurance sous le hero (01/10) : ce qui protège la cliente, lisible dès l'arrivée. */
+  #pc-{{ section.id }} .pc-trust{background:var(--pn-nuit2);border-top:1px solid var(--pn-line-dark);border-bottom:1px solid var(--pn-line-dark)}
+  #pc-{{ section.id }} .pc-trust__list{list-style:none;margin:0 auto;padding-block:22px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 28px}
+  #pc-{{ section.id }} .pc-trust__list li{display:grid;gap:4px;align-content:start}
+  #pc-{{ section.id }} .pc-trust__list b{font-family:var(--pn-disp);font-weight:400;font-size:19px;line-height:1.2;color:var(--pn-clair)}
+  #pc-{{ section.id }} .pc-trust__list span{font-size:14px;line-height:1.45;color:var(--pn-clair-dim)}
   @media (max-width:860px){
+    #pc-{{ section.id }} .pc-trust__list{grid-template-columns:repeat(2,minmax(0,1fr))}
     #pc-{{ section.id }} .pc-pause{top:calc(var(--pc-head, 0px) + 12px);bottom:auto}
     #pc-{{ section.id }} .pc-ia{top:calc(var(--pc-head, 0px) + 22px)}
   }
@@ -105,6 +112,32 @@
     {%- if section.settings.ia_note != blank -%}<p class='pc-ia'>{{ section.settings.ia_note | escape }}</p>{%- endif -%}
     <button type='button' class='pc-pause' hidden aria-pressed='false' aria-label='Mettre la vidéo en pause'><span class='pc-pause__i' aria-hidden='true'></span></button>
   </section>
+
+  {%- if section.settings.trust_1_title != blank -%}
+  <section class='pc-trust' aria-label='{{ section.settings.trust_label | escape }}'>
+    <ul class='pc-w pc-trust__list' role='list'>
+      {%- for i in (1..4) -%}
+        {%- liquid
+          case i
+            when 1
+              assign tt = section.settings.trust_1_title
+              assign tx = section.settings.trust_1_text
+            when 2
+              assign tt = section.settings.trust_2_title
+              assign tx = section.settings.trust_2_text
+            when 3
+              assign tt = section.settings.trust_3_title
+              assign tx = section.settings.trust_3_text
+            else
+              assign tt = section.settings.trust_4_title
+              assign tx = section.settings.trust_4_text
+          endcase
+        -%}
+        {%- if tt != blank -%}<li><b>{{ tt | escape }}</b><span>{{ tx | escape }}</span></li>{%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </section>
+  {%- endif -%}
 
   <section class='pc-s pc-lin' id='rituel' aria-labelledby='pc-rit-{{ section.id }}'>
     <div class='pc-w'>
@@ -213,6 +246,36 @@
   </section>
 </div>
 
+{%- comment -%} Données structurées de la boutique (Google) : qui vend, où, comment la joindre. {%- endcomment -%}
+<script type='application/ld+json'>
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ shop.name | json }},
+  "url": {{ request.origin | json }},
+  "email": "contact@lapenombre.fr",
+  {%- if settings.logo != blank -%}"logo": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }},{%- endif -%}
+  "founder": { "@type": "Person", "name": "Peter Buffe" },
+  "address": { "@type": "PostalAddress", "streetAddress": "62 rue du Rochoir", "postalCode": "62430", "addressLocality": "Sallaumines", "addressCountry": "FR" }
+}
+</script>
+{%- if has_faq -%}
+<script type='application/ld+json'>
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- assign first_q = true -%}
+    {%- for block in section.blocks -%}{%- if block.type == 'faq' -%}
+      {%- unless first_q -%},{%- endunless -%}
+      { "@type": "Question", "name": {{ block.settings.question | json }}, "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | strip_html | json }} } }
+      {%- assign first_q = false -%}
+    {%- endif -%}{%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}
+
 <script>
 (function(){
   var root = document.getElementById('pc-{{ section.id }}');
@@ -300,6 +363,16 @@
     { "type": "text", "id": "cta_buy", "label": "Bouton (en vente)", "default": "Découvrir le masque" },
     { "type": "text", "id": "price_note", "label": "Sous le prix", "default": "Livraison offerte · 30 jours pour changer d'avis" },
     { "type": "text", "id": "ia_note", "label": "Mention IA (vide = masquée)", "default": "Vidéo créée par IA, en attendant nos propres images." },
+    { "type": "header", "content": "Bande de réassurance (sous le hero ; titre 1 vide = bande masquée)" },
+    { "type": "text", "id": "trust_label", "label": "Nom de la bande pour les lecteurs d'écran", "default": "Ce qui vous protège" },
+    { "type": "text", "id": "trust_1_title", "label": "Point 1 : titre", "default": "Livraison offerte" },
+    { "type": "text", "id": "trust_1_text", "label": "Point 1 : détail", "default": "Suivie jusqu'à chez vous" },
+    { "type": "text", "id": "trust_2_title", "label": "Point 2 : titre", "default": "30 jours" },
+    { "type": "text", "id": "trust_2_text", "label": "Point 2 : détail", "default": "Après réception, pour changer d'avis" },
+    { "type": "text", "id": "trust_3_title", "label": "Point 3 : titre", "default": "Aucun UV" },
+    { "type": "text", "id": "trust_3_text", "label": "Point 3 : détail", "default": "Lumière évaluée EN 62471, groupe exempt" },
+    { "type": "text", "id": "trust_4_title", "label": "Point 4 : titre", "default": "Peter vous répond" },
+    { "type": "text", "id": "trust_4_text", "label": "Point 4 : détail", "default": "Lui-même, sous 48 h ouvrées" },
     { "type": "header", "content": "Les lumières (bloc retiré, réglages non utilisés)" },
     { "type": "text", "id": "lum_kicker", "label": "Surtitre", "default": "Les trois lumières" },
     { "type": "html", "id": "lum_heading", "label": "Titre", "default": "Plus l'onde est longue, <em>plus elle va loin.</em>" },

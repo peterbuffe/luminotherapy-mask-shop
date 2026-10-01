@@ -107,3 +107,26 @@ Les animations existantes sont conservées : « la lumière baisse », lueur du 
 | `page.preuves.json` | Nos preuves | Bloc des preuves complet |
 | `page.qui.json` | Qui vous répond | Bloc « Qui vous répond » et frise |
 | `page.contact.json` | Contact | Texte de la page et formulaire de contact Dawn (schéma prune) |
+
+## SEO, textes et confiance (01/10)
+
+**Appliqué en direct (contenu Shopify, partagé par tous les thèmes) :**
+- **Fiche produit :**
+  - titre Google « Masque LED visage bleu, rouge, infrarouge | La Pénombre » ;
+  - description Google de 150 caractères ;
+  - description réécrite à la première personne (« je » = Peter), sans changer aucun fait.
+- **Page Suivi de commande :**
+  - **correction d'une contradiction** : elle annonçait 2 à 5 jours ouvrés après l'expédition, alors que la fiche et la FAQ disent 3 à 4 semaines ;
+  - texte réécrit, formulaire aux couleurs prune, mention « le suivi peut rester immobile au début ».
+- **Page Contact :** texte ajouté (« C'est moi, Peter, qui lis chaque message… »).
+- **Pages Contact, Suivi, Nos preuves et Qui vous répond :** titres et descriptions Google revus.
+- Contenu source : `content/`.
+
+**Préparé pour le thème (en attente d'une copie : le thème cinéma est publié, et la boutique est à 20 thèmes) :**
+- **Accueil :**
+  - nouveau titre H1 « Votre masque LED du soir. Dix minutes, les yeux fermés. » ;
+  - bande de réassurance sous le hero (livraison offerte, 30 jours, aucun UV, Peter vous répond) ;
+  - textes à la première personne ;
+  - données structurées Organization et FAQPage.
+- **Partage après inscription** (`penombre-motion.js/.css`) : partage du téléphone, WhatsApp ou copie du lien, sans récompense.
+- **Fiche produit** (`templates/product.json`) : textes de la liste d'attente et de la FAQ à la première personne.

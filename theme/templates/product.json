@@ -1,0 +1,117 @@
+{
+ "sections": {
+  "main": {
+   "type": "penombre-product",
+   "blocks": {
+    "u1": {
+     "type": "usp",
+     "settings": {
+      "text": "Trois lumières : bleu, rouge, rouge + infrarouge"
+     }
+    },
+    "u2": {
+     "type": "usp",
+     "settings": {
+      "text": "Dix minutes, puis il s'éteint seul"
+     }
+    },
+    "u4": {
+     "type": "usp",
+     "settings": {
+      "text": "Batterie dans la télécommande, recharge USB-C"
+     }
+    },
+    "f1": {
+     "type": "faq",
+     "settings": {
+      "question": "Qu'est-ce que vous pouvez en attendre ?",
+      "answer": "<p>Dix minutes de calme, le soir, rien qu'à vous. Je ne vous promets rien d'autre.</p>"
+     }
+    },
+    "f10": {
+     "type": "faq",
+     "settings": {
+      "question": "Quelle différence entre les trois lumières ?",
+      "answer": "<p>Leur couleur, et la profondeur à laquelle elles entrent dans la peau : plus la longueur d'onde est longue, plus la lumière va loin. Le bleu (430 nm) reste en surface, à moins d'1 mm. Le rouge (630 nm) pénètre environ 2 mm. L'infrarouge proche (850 nm) environ 3 mm ; il s'allume avec le rouge et reste invisible à l'œil : vous ne voyez que du rouge. Ce sont des ordres de grandeur publiés par la recherche, qui varient selon la peau.</p>"
+     }
+    },
+    "f11": {
+     "type": "faq",
+     "settings": {
+      "question": "Pourquoi ces trois lumières ?",
+      "answer": "<p>Parce que ce sont les trois longueurs d'onde au cœur des recherches sur la lumière et la peau, et celles qu'utilisent la plupart des masques LED, y compris les plus connus. Ici, vous avez les trois dans un seul masque en silicone souple, avec leur puissance écrite noir sur blanc et un rapport de laboratoire sur la sécurité de la lumière. Pas de promesse miracle : ce qui est mesuré, et 30 jours pour vous faire votre propre avis.</p>"
+     }
+    },
+    "f3": {
+     "type": "faq",
+     "settings": {
+      "question": "Et pour vos yeux ?",
+      "answer": "<p>Le masque a été évalué selon la norme EN 62471 (sécurité photobiologique) et classé en groupe exempt, la catégorie la plus basse. Il n'émet pas d'UV. Gardez quand même les yeux fermés pendant toute la séance, et si vous prenez un médicament photosensibilisant, demandez l'avis de votre médecin avant de l'utiliser.</p>"
+     }
+    },
+    "f9": {
+     "type": "faq",
+     "settings": {
+      "question": "Pourquoi aucun avis ?",
+      "answer": "<p>Parce que la boutique n'a pas encore ouvert : personne n'a pu acheter ce masque ici. Les avis viendront des vraies commandes, et chacun sera daté. Je ne recopierai jamais ceux d'autres sites, et je n'en inventerai aucun.</p>"
+     }
+    }
+   },
+   "block_order": [
+    "u1",
+    "u2",
+    "u4",
+    "f1",
+    "f10",
+    "f11",
+    "f3",
+    "f9"
+   ],
+   "settings": {
+    "eyebrow": "Masque LED visage",
+    "price_note": "Livraison offerte",
+    "pay_note": "Paiement en 3 fois avec Klarna",
+    "pitch": "Dix minutes, les yeux fermés, sans rien faire.",
+    "cta_label": "Ajouter au panier",
+    "cta_short": "Ajouter",
+    "eta_min": 16,
+    "eta_max": 20,
+    "ia_note": "Visuels créés par IA, en attendant mes propres photos.",
+    "form_note": "Livraison offerte et suivie en 3 à 4 semaines",
+    "return_note": "30 jours après réception pour changer d'avis",
+    "proof_1": "Groupe exempt EN 62471",
+    "proof_2": "4 rapports de laboratoire",
+    "proof_3": "Importateur en France",
+    "wait_title": "Pas encore en vente. Laissez-moi votre e-mail : je vous préviens à l'ouverture, avec mes vraies photos.",
+    "wait_cta": "Prévenez-moi à l'ouverture",
+    "wait_short": "Prévenez-moi",
+    "wait_bar": "bientôt en vente",
+    "wait_ok": "C'est noté. Je vous écris dès que mon exemplaire arrive, avec ses vraies photos.",
+    "wait_legal": "En vous inscrivant, vous acceptez de recevoir mes e-mails : deux avant l'ouverture, pas plus. Désinscription en un clic.",
+    "r1_title": "Paiement sécurisé",
+    "r1_text": "Carte bancaire, Apple Pay, PayPal, Klarna en 3 fois",
+    "r2_title": "Peter vous répond",
+    "r2_text": "Lui-même, à contact@lapenombre.fr, sous 48 h ouvrées",
+    "detail_kicker": "En détail",
+    "detail_heading": "Tout ce qu'il faut savoir avant de commander.",
+    "faq_kicker": "Vos questions",
+    "faq_heading": "Ce que vous vous demandez sans doute."
+   }
+  },
+  "film": {
+   "type": "penombre-film",
+   "settings": {
+    "poster": "shopify://shop_images/hf_20260930_214433_28dc2393-27d3-4ada-9ce9-5ba2748ac8ff.png"
+   }
+  },
+  "palette": {
+   "type": "penombre-palette",
+   "settings": {}
+  }
+ },
+ "order": [
+  "main",
+  "film",
+  "palette"
+ ]
+}

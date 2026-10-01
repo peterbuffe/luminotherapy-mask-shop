@@ -7,7 +7,7 @@
      "type": "faq",
      "settings": {
       "question": "Qu'est-ce que vous pouvez en attendre ?",
-      "answer": "<p>Dix minutes de calme, le soir. Pour votre peau, nous ne promettons rien, et nous refusons d'afficher un chiffre que personne n'a mesuré pour lui.</p>"
+      "answer": "<p>Dix minutes de calme, le soir, rien qu'à vous. Pour votre peau, je ne vous promets rien, et je refuse d'afficher un chiffre que personne n'a mesuré sur ce masque.</p>"
      }
     },
     "f4": {
@@ -28,14 +28,14 @@
      "type": "faq",
      "settings": {
       "question": "Pourquoi 3 à 4 semaines de livraison ?",
-      "answer": "<p>Parce que chaque masque part directement de chez son fabricant, sans passer par un entrepôt. Comptez 1 à 3 jours ouvrés de préparation, puis 15 à 17 jours ouvrés de transport. C'est long, et nous préférons vous le dire avant votre commande qu'après.</p><p>Livraison offerte en France métropolitaine. Une inquiétude en route ? Écrivez à <a href=\"mailto:contact@lapenombre.fr\">contact@lapenombre.fr</a>.</p>"
+      "answer": "<p>Parce que chaque masque part directement de chez son fabricant, sans passer par un entrepôt. Comptez 1 à 3 jours ouvrés de préparation, puis 15 à 17 jours ouvrés de transport. C'est long, et je préfère vous le dire avant votre commande qu'après.</p><p>Livraison offerte en France métropolitaine. Une inquiétude en route ? Écrivez-moi à <a href=\"mailto:contact@lapenombre.fr\">contact@lapenombre.fr</a>.</p>"
      }
     },
     "f7": {
      "type": "faq",
      "settings": {
       "question": "Et si ça ne vous plaît pas ?",
-      "answer": "<p>Vous avez 30 jours après réception pour changer d'avis, sans vous justifier. Écrivez à <a href=\"mailto:contact@lapenombre.fr\">contact@lapenombre.fr</a> : nous vous répondons sous 48 h ouvrées avec l'adresse de retour.</p><p>Le renvoi est à votre charge ; si le masque arrive défectueux ou abîmé, nous prenons tout en charge. Vous êtes remboursée au plus tard 14 jours après nous avoir informés de votre décision ; nous pouvons attendre d'avoir reçu le masque ou la preuve de son envoi.</p>"
+      "answer": "<p>Vous avez 30 jours après réception pour changer d'avis, sans avoir à vous justifier. Écrivez-moi à <a href=\"mailto:contact@lapenombre.fr\">contact@lapenombre.fr</a> : je vous réponds sous 48 h ouvrées avec l'adresse de retour.</p><p>Le renvoi est à votre charge ; si le masque arrive défectueux ou abîmé, je prends tout en charge. Vous êtes remboursée au plus tard 14 jours après m'avoir informé de votre décision ; je peux attendre d'avoir reçu le masque ou la preuve de son envoi.</p>"
      }
     }
    },
@@ -50,9 +50,26 @@
     "product": "le-masque-du-soir-masque-led-visage-rouge-et-infrarouge",
     "poster": "shopify://shop_images/hf_20260930_214433_b8a44f38-15db-42f0-9e9d-39db7ab4fd62.png",
     "poster_alt": "Le masque posé sur une table de chevet en lin, le soir",
-    "nolie_text": "199 €, c'est le vrai prix : il n'a jamais été gonflé pour être barré. Ce n'est pas un appareil médical, et nous ne promettons rien à votre peau : le fabricant n'a mené aucun essai clinique sur ce modèle. Ce que nous vendons : dix minutes de calme, le soir, et des documents que vous pouvez lire.",
+    "nolie_text": "199 €, c'est le vrai prix : je ne l'ai jamais gonflé pour le barrer ensuite. Ce n'est pas un appareil médical, et je ne vous promets rien pour votre peau : le fabricant n'a mené aucun essai clinique sur ce modèle. Ce que je vous propose : dix minutes de calme, le soir, et des documents que vous pouvez lire avant de décider.",
     "video_desktop": "masque-du-soir-couleurs-ordinateur.mp4",
-    "video_mobile": "masque-du-soir-couleurs-telephone.mp4"
+    "video_mobile": "masque-du-soir-couleurs-telephone.mp4",
+    "kicker": "Masque LED visage · bleu, rouge, infrarouge",
+    "heading": "Votre masque LED du soir.<br><em>Dix minutes, les yeux fermés.</em>",
+    "lead": "Vous le posez, vous fermez les yeux, et pendant dix minutes, personne ne vous demande rien. Puis il s'éteint tout seul.",
+    "price_note": "Livraison offerte · 30 jours pour changer d'avis",
+    "step_1_title": "Votre visage, propre",
+    "step_1_text": "Démaquillé, séché, sans crème. Votre soin habituel viendra après.",
+    "step_2_title": "Votre lumière",
+    "step_2_text": "Bleu, ou rouge et infrarouge, d'un geste sur la télécommande. Vous posez le masque, vous fermez les yeux.",
+    "step_3_title": "Vous ne faites plus rien",
+    "step_3_text": "Dix minutes. Il s'éteint seul. Votre lampe peut rester allumée.",
+    "pre_heading": "Ce qui est mesuré, <em>écrit noir sur blanc.</em>",
+    "proof_4_title": "Une personne",
+    "proof_4_text": "Peter importe le masque en France et en répond lui-même",
+    "wait_heading": "Il n'est pas encore en vente. <em>Soyez prévenue dès l'ouverture.</em>",
+    "wait_text": "Laissez-moi votre e-mail : je vous écris quand mon exemplaire arrive, avec mes vraies photos, puis le jour où les ventes ouvrent. Deux e-mails, pas plus.",
+    "wait_ok": "C'est noté. Je vous écris dès que mon exemplaire arrive, avec ses vraies photos.",
+    "fact_3": "C'est moi, Peter, qui vous réponds : contact@lapenombre.fr, sous 48 h ouvrées"
    }
   },
   "palette": {

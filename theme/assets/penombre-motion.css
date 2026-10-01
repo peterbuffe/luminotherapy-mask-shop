@@ -46,6 +46,18 @@ html.pn-motion #MainContent [data-pn-stagger]>*{opacity:0;transform:translateY(8
   transition:opacity .35s ease-out,transform .35s ease-out;transition-delay:calc(var(--pn-i,0) * 70ms)}
 html.pn-motion #MainContent [data-pn-stagger].is-in>*{opacity:1;transform:none}
 
+/* ---------- 6. Partage après inscription (bouche à oreille) ---------- */
+.pn-share{display:grid;gap:10px;margin-top:14px;max-width:44ch;font-family:var(--pn-body)}
+.pn-share__t{margin:0;font-size:15px;line-height:1.5;color:inherit;opacity:.9}
+.pn-share__b{display:flex;flex-wrap:wrap;gap:8px}
+.pn-share__b a,.pn-share__b button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border:1px solid currentColor;border-radius:0;background:transparent;color:inherit;font:500 12.5px/1 var(--pn-body);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:background .18s,color .18s}
+.pn-share__b a:hover,.pn-share__b button:hover{background:var(--pn-chair);border-color:var(--pn-chair);color:var(--pn-profond)}
+.pn-share__ok{margin:0;font-size:14px;opacity:.85}
+.pn-share__ok:empty{display:none}
+.pc-lin .pn-share{color:var(--pn-encre)}
+.pp__buy .pn-share,.pc-hero .pn-share{color:var(--pn-clair)}
+.pc-hform .pn-share{flex:1 0 100%}
+
 /* ---------- Réduire les animations ---------- */
 @media (prefers-reduced-motion:reduce){
   #MainContent .hero .offers,
@@ -62,4 +74,5 @@ html.pn-motion #MainContent [data-pn-stagger].is-in>*{opacity:1;transform:none}
   #MainContent .offer--main:active,
   #MainContent .buybar__cta:active{transform:none}
   html.pn-motion #MainContent [data-pn-stagger]>*{opacity:1;transform:none;transition:none}
+  .pn-share__b a,.pn-share__b button{transition:none}
 }
