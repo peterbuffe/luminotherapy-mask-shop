@@ -130,3 +130,9 @@ Les animations existantes sont conservées : « la lumière baisse », lueur du 
   - données structurées Organization et FAQPage.
 - **Partage après inscription** (`penombre-motion.js/.css`) : partage du téléphone, WhatsApp ou copie du lien, sans récompense.
 - **Fiche produit** (`templates/product.json`) : textes de la liste d'attente et de la FAQ à la première personne.
+
+### Mise en ligne sur la copie « la-penombre-18 (confiance) » (01/10)
+- Thème 209014030667 : envoyés penombre-motion.js/css (partage après inscription), sections/penombre-cinema.liquid (bande de réassurance, Organization + FAQPage JSON-LD), templates/index.json et product.json (textes à la première personne).
+- Deux textes par défaut passés à la première personne (mention IA, mention sous le formulaire).
+- Intitulé de réglage raccourci : Shopify limite les titres de rubrique à 50 caractères.
+- Aperçu : https://lapenombre.fr/?preview_theme_id=209014030667 ; à publier par Peter.
