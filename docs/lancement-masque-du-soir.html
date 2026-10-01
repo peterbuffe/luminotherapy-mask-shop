@@ -1,0 +1,488 @@
+<title>Lancement du Masque du soir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column, the money first (calculator), then the gate (checklist), then the daily log. Palette = La Pénombre (lin / prune / vieux rose). */
+:root{
+  --bg:#F7EEF0; --surface:#FCF7F8; --line:rgba(34,16,29,.14);
+  --fg:#22101D; --muted:#62505C; --accent:#84475A; --accent-soft:rgba(132,71,90,.10);
+  --good:#2F6B4A; --good-soft:rgba(47,107,74,.12);
+  --warn:#8A5A12; --warn-soft:rgba(138,90,18,.12);
+  --bad:#9B2C2C; --bad-soft:rgba(155,44,44,.11);
+  --disp:"Fraunces", Georgia, "Times New Roman", serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#150812; --surface:#1D0E19; --line:rgba(246,235,239,.16);
+  --fg:#F6EBEF; --muted:#CDB3BF; --accent:#CC98A6; --accent-soft:rgba(204,152,166,.12);
+  --good:#7FC79D; --good-soft:rgba(127,199,157,.14);
+  --warn:#E2B66B; --warn-soft:rgba(226,182,107,.14);
+  --bad:#F09A9A; --bad-soft:rgba(240,154,154,.13);
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#150812; --surface:#1D0E19; --line:rgba(246,235,239,.16);
+  --fg:#F6EBEF; --muted:#CDB3BF; --accent:#CC98A6; --accent-soft:rgba(204,152,166,.12);
+  --good:#7FC79D; --good-soft:rgba(127,199,157,.14);
+  --warn:#E2B66B; --warn-soft:rgba(226,182,107,.14);
+  --bad:#F09A9A; --bad-soft:rgba(240,154,154,.13);
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:32px 72px;display:grid;gap:44px}
+h1,h2{font-family:var(--disp);font-weight:300;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,7vw,52px);line-height:1.02}
+h1 em,h2 em{font-style:italic;color:var(--accent)}
+h2{font-size:clamp(24px,4.4vw,32px);line-height:1.1}
+.kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.lead{color:var(--muted);max-width:60ch;margin:0}
+header{display:grid;gap:12px}
+section{display:grid;gap:18px}
+.sec-head{display:grid;gap:6px}
+.note{font-size:14px;color:var(--muted);margin:0;max-width:62ch}
+.num{font-variant-numeric:tabular-nums}
+
+/* Summary verdict */
+.verdict{border:1px solid var(--line);background:var(--surface);padding:18px;display:grid;gap:14px}
+.verdict__top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.pill--good{color:var(--good);background:var(--good-soft)}
+.pill--warn{color:var(--warn);background:var(--warn-soft)}
+.pill--bad{color:var(--bad);background:var(--bad-soft)}
+.pill--wait{color:var(--muted);background:var(--accent-soft)}
+.verdict__msg{margin:0;font-size:15px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{display:grid;gap:2px;min-width:0}
+.kpi b{font-family:var(--disp);font-weight:400;font-size:24px;line-height:1.15}
+.kpi span{font-size:12.5px;color:var(--muted)}
+.meter{height:6px;background:var(--accent-soft);position:relative;overflow:hidden}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--accent);width:0}
+@media (max-width:600px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+/* Calculator */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:640px){ .calc{grid-template-columns:minmax(0,1fr)} }
+.fields{display:grid;gap:12px}
+.field{display:grid;grid-template-columns:minmax(0,1fr) 112px;align-items:center;gap:10px}
+.field label{font-size:14.5px}
+.field small{display:block;font-size:12.5px;color:var(--muted)}
+.inp{position:relative}
+.inp input,.inp select{width:100%;min-height:42px;padding:0 30px 0 10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 15px var(--body);font-variant-numeric:tabular-nums;border-radius:0}
+.inp select{padding-right:10px}
+.inp em{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-style:normal;color:var(--muted);font-size:13px;pointer-events:none}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ledger{border-top:1px solid var(--fg)}
+.ledger div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.ledger div span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.ledger .sub{font-weight:600}
+.ledger .key{font-weight:600;color:var(--accent)}
+.thresholds{display:grid;gap:8px;margin-top:14px}
+.th{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14.5px}
+
+/* Checklist */
+.checks{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.checks li{border-bottom:1px solid var(--line)}
+.checks label{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;padding:12px 0;cursor:pointer;align-items:start}
+.checks input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent)}
+.checks b{font-weight:500;display:block}
+.checks small{color:var(--muted);font-size:13.5px}
+.checks input:checked + span b{text-decoration:line-through;text-decoration-color:var(--accent);color:var(--muted)}
+.progress{font-size:14px;color:var(--muted)}
+
+/* Plan */
+.plan{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.plan li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+.plan li > span{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;padding-top:2px}
+.plan p{margin:0}
+.plan ul{margin:6px 0 0;padding-left:1.1em;display:grid;gap:3px}
+@media (max-width:520px){ .plan li{grid-template-columns:minmax(0,1fr);gap:4px} }
+
+/* Log */
+.addform{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) auto;gap:10px;align-items:end;border:1px solid var(--line);background:var(--surface);padding:14px}
+.addform .f{display:grid;gap:4px;min-width:0}
+.addform label{font-size:12.5px;color:var(--muted)}
+.addform .inp input,.addform .inp select{background:var(--bg)}
+@media (max-width:720px){ .addform{grid-template-columns:repeat(2,minmax(0,1fr))} .addform .btn{grid-column:1/-1} }
+.btn{min-height:42px;padding:0 18px;border:1px solid var(--accent);background:var(--accent);color:var(--bg);font:600 14px var(--body);cursor:pointer;border-radius:0}
+.btn:hover{filter:brightness(1.08)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.formmsg{font-size:14px;margin:0;min-height:1.4em}
+.formmsg.err{color:var(--bad)}
+.tablebox{overflow-x:auto;border-top:1px solid var(--fg)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:620px}
+th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
+td .pill{font-size:12px;padding:3px 9px}
+.del{background:none;border:0;color:var(--muted);cursor:pointer;font:500 13px var(--body);padding:4px 6px;text-decoration:underline;text-underline-offset:3px}
+.del.arm{color:var(--bad)}
+.empty{border:1px dashed var(--line);padding:22px;color:var(--muted);font-size:15px;display:grid;gap:6px}
+.empty b{color:var(--fg);font-weight:500}
+.status{font-size:13px;color:var(--muted)}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (prefers-reduced-motion:no-preference){ .meter i{transition:width .5s ease} }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="kicker">La Pénombre · ouverture des ventes</span>
+    <h1>Le Masque du soir, <em>vendu sans y perdre.</em></h1>
+    <p class="lead">Combien une vente peut coûter en publicité, ce qu'il reste à faire avant d'ouvrir, et le suivi jour par jour pour savoir quand augmenter, changer ou couper.</p>
+  </header>
+
+  <section aria-labelledby="h-bilan">
+    <div class="sec-head">
+      <span class="kicker">Où en est le test</span>
+      <h2 id="h-bilan">Le verdict, <em>mis à jour à chaque saisie.</em></h2>
+    </div>
+    <div class="verdict">
+      <div class="verdict__top">
+        <span class="pill pill--wait" id="v-pill">Pas encore commencé</span>
+        <span class="status num" id="v-spent">0 € dépensés sur 280 € de test</span>
+      </div>
+      <div class="meter" aria-hidden="true"><i id="v-meter"></i></div>
+      <p class="verdict__msg" id="v-msg">Ajoute ton premier jour de publicité plus bas. Le verdict tombe une fois 280 € dépensés : avant, il y a trop peu de ventes pour juger.</p>
+      <div class="kpis">
+        <div class="kpi"><b class="num" id="k-spend">0 €</b><span>Dépense pub</span></div>
+        <div class="kpi"><b class="num" id="k-sales">0</b><span>Ventes</span></div>
+        <div class="kpi"><b class="num" id="k-cpa">—</b><span>Pub par vente</span></div>
+        <div class="kpi"><b class="num" id="k-profit">0 €</b><span>Bénéfice après pub</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-calc">
+    <div class="sec-head">
+      <span class="kicker">Le calcul</span>
+      <h2 id="h-calc">Ce qu'il reste <em>sur une vente.</em></h2>
+      <p class="note">Modifie un chiffre et tout se recalcule, le verdict compris. Les deux taux à vérifier : tes cotisations 2026 sur ton espace URSSAF, et les frais réels de ton moyen de paiement.</p>
+    </div>
+    <div class="calc">
+      <div class="fields">
+        <div class="field"><label for="c-prix">Prix de vente<small>Sans TVA (art. 293 B)</small></label><div class="inp"><input id="c-prix" type="number" inputmode="decimal" step="0.01" min="0"><em>€</em></div></div>
+        <div class="field"><label for="c-cout">Masque livré chez elle<small>Achat + envoi</small></label><div class="inp"><input id="c-cout" type="number" inputmode="decimal" step="0.01" min="0"><em>€</em></div></div>
+        <div class="field"><label for="c-fpct">Frais de paiement<small>Part variable</small></label><div class="inp"><input id="c-fpct" type="number" inputmode="decimal" step="0.1" min="0"><em>%</em></div></div>
+        <div class="field"><label for="c-ffix">Frais de paiement<small>Part fixe par vente</small></label><div class="inp"><input id="c-ffix" type="number" inputmode="decimal" step="0.01" min="0"><em>€</em></div></div>
+        <div class="field"><label for="c-urssaf">Cotisations<small>Micro-entreprise, vente</small></label><div class="inp"><input id="c-urssaf" type="number" inputmode="decimal" step="0.1" min="0"><em>%</em></div></div>
+        <div class="field"><label for="c-ret">Réserve retours<small>Part du prix mise de côté</small></label><div class="inp"><input id="c-ret" type="number" inputmode="decimal" step="0.5" min="0"><em>%</em></div></div>
+        <div class="field"><label for="c-benef">Bénéfice visé<small>Par vente, après pub</small></label><div class="inp"><input id="c-benef" type="number" inputmode="decimal" step="1" min="0"><em>€</em></div></div>
+        <p class="status" id="c-status" aria-live="polite"></p>
+      </div>
+      <div>
+        <div class="ledger">
+          <div><span>Prix de vente</span><span id="l-prix"></span></div>
+          <div><span>Masque livré</span><span id="l-cout"></span></div>
+          <div><span>Frais de paiement</span><span id="l-frais"></span></div>
+          <div><span>Cotisations</span><span id="l-urssaf"></span></div>
+          <div class="sub"><span>Reste avant pub</span><span id="l-marge"></span></div>
+          <div><span>Réserve retours</span><span id="l-ret"></span></div>
+          <div class="key"><span>Pub max par vente</span><span id="l-seuil"></span></div>
+        </div>
+        <div class="thresholds">
+          <div class="th"><span class="pill pill--good">Rentable</span><span class="num" id="t-good"></span></div>
+          <div class="th"><span class="pill pill--warn">À retravailler</span><span class="num" id="t-warn"></span></div>
+          <div class="th"><span class="pill pill--bad">À couper</span><span class="num" id="t-bad"></span></div>
+          <p class="note num" id="t-roas"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-check">
+    <div class="sec-head">
+      <span class="kicker">Avant d'ouvrir</span>
+      <h2 id="h-check">Sept points, <em>dans cet ordre.</em></h2>
+      <p class="progress" id="ck-progress">0 sur 7 faits</p>
+    </div>
+    <ul class="checks" id="checks"></ul>
+  </section>
+
+  <section aria-labelledby="h-plan">
+    <div class="sec-head">
+      <span class="kicker">Le plan de test</span>
+      <h2 id="h-plan">Deux semaines, <em>une décision.</em></h2>
+    </div>
+    <ol class="plan">
+      <li><span>Jour 0</span><p>E-mail d'ouverture à la liste d'attente, sans publicité. Ces ventes ne coûtent presque rien en pub et font baisser ton coût moyen.</p></li>
+      <li><span>Jours 1 à 14</span><p>Meta seul, 20 € par jour, une vidéo tournée avec le vrai masque. Note chaque soir la dépense et les ventes ci-dessous. Ne touche à rien les 3 premiers jours : Meta apprend.</p></li>
+      <li><span>Décision</span><div><p>Une fois 280 € dépensés, regarde la pub par vente :</p><ul id="plan-rules"></ul></div></li>
+      <li><span>Ensuite</span><p>Ajoute le reciblage (les personnes déjà venues sur le site), puis TikTok, seulement quand Meta est rentable.</p></li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="h-log">
+    <div class="sec-head">
+      <span class="kicker">Le suivi</span>
+      <h2 id="h-log">Chaque soir, <em>deux chiffres.</em></h2>
+      <p class="note">La dépense se lit dans le Gestionnaire de publicités Meta (ou TikTok), les ventes dans Shopify → Commandes. Une ligne par jour et par plateforme ; ressaisir le même jour la remplace.</p>
+    </div>
+    <form class="addform" id="addform" novalidate>
+      <div class="f"><label for="a-date">Jour</label><div class="inp"><input id="a-date" type="date" required></div></div>
+      <div class="f"><label for="a-canal">Plateforme</label><div class="inp"><select id="a-canal"><option>Meta</option><option>TikTok</option><option>Liste d'attente</option></select></div></div>
+      <div class="f"><label for="a-spend">Dépense</label><div class="inp"><input id="a-spend" type="number" inputmode="decimal" step="0.01" min="0" placeholder="20"><em>€</em></div></div>
+      <div class="f"><label for="a-sales">Ventes</label><div class="inp"><input id="a-sales" type="number" inputmode="numeric" step="1" min="0" placeholder="0"></div></div>
+      <div class="f"><label for="a-leads">Inscriptions</label><div class="inp"><input id="a-leads" type="number" inputmode="numeric" step="1" min="0" placeholder="0"></div></div>
+      <button class="btn" type="submit" id="a-btn">Enregistrer</button>
+    </form>
+    <p class="formmsg" id="a-msg" aria-live="polite"></p>
+    <div id="log"></div>
+  </section>
+
+  <footer>Les seuils viennent de ton calcul ci-dessus, pas d'une moyenne du marché. Un taux d'achat de 1 % en publicité froide est une hypothèse de départ : ce tableau sert justement à mesurer le tien.</footer>
+</div>
+
+<script>
+(function(){
+  var DEFAULTS = { prix:199, cout:77, fpct:1.5, ffix:0.25, urssaf:12.3, ret:5, benef:30 };
+  var TEST_BUDGET = 280;
+  var CHECKS = [
+    ["ue","Déclaration UE de conformité signée reçue","Préalable légal pour vendre un appareil électrique."],
+    ["photos","Vraies photos et vidéo du masque en ligne","Retirer la mention « visuels créés par IA »."],
+    ["stock","Stock saisi dans Shopify","Le bouton « Ajouter au panier » remplace alors « Prévenez-moi »."],
+    ["test","Commande test passée puis remboursée","Paiement, e-mail de confirmation, suivi."],
+    ["klarna","Klarna vérifié, ou mention retirée","Paramètres → Paiements."],
+    ["pixels","Applis Facebook & Instagram et TikTok installées","Pour que les ventes remontent aux publicités."],
+    ["mail","E-mail d'ouverture envoyé à la liste d'attente","Avant la première publicité."]
+  ];
+
+  var $ = function(id){ return document.getElementById(id); };
+  var eur = new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'});
+  var eur0 = new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+  var n1 = new Intl.NumberFormat('fr-FR',{maximumFractionDigits:1});
+
+  var costs = Object.assign({}, DEFAULTS);
+  var checks = {};
+  var rows = [];
+  var db = null, canWrite = true;
+
+  function num(v, d){ var x = parseFloat(String(v).replace(',','.')); return isFinite(x) ? x : d; }
+
+  function model(){
+    var c = costs;
+    var frais = c.prix * c.fpct/100 + c.ffix;
+    var urssaf = c.prix * c.urssaf/100;
+    var marge = c.prix - c.cout - frais - urssaf;
+    var ret = c.prix * c.ret/100;
+    var seuil = marge - ret;
+    var cible = Math.max(0, seuil - c.benef);
+    return { frais:frais, urssaf:urssaf, marge:marge, ret:ret, seuil:seuil, cible:cible, net:seuil };
+  }
+
+  function grade(cpa, m){
+    if (cpa <= m.cible) return ['good','Rentable'];
+    if (cpa <= m.seuil) return ['warn','À retravailler'];
+    return ['bad','À couper'];
+  }
+
+  function renderCalc(){
+    var c = costs, m = model();
+    ['prix','cout','fpct','ffix','urssaf','ret','benef'].forEach(function(k){
+      var el = $('c-'+k); if (document.activeElement !== el) el.value = c[k];
+    });
+    $('l-prix').textContent = eur.format(c.prix);
+    $('l-cout').textContent = '− ' + eur.format(c.cout);
+    $('l-frais').textContent = '− ' + eur.format(m.frais);
+    $('l-urssaf').textContent = '− ' + eur.format(m.urssaf);
+    $('l-marge').textContent = eur.format(m.marge);
+    $('l-ret').textContent = '− ' + eur.format(m.ret);
+    $('l-seuil').textContent = eur.format(m.seuil);
+    $('t-good').textContent = 'moins de ' + eur0.format(m.cible) + ' par vente';
+    $('t-warn').textContent = eur0.format(m.cible) + ' à ' + eur0.format(m.seuil);
+    $('t-bad').textContent = 'plus de ' + eur0.format(m.seuil);
+    var roasCible = m.cible > 0 ? c.prix / m.cible : null, roasSeuil = m.seuil > 0 ? c.prix / m.seuil : null;
+    $('t-roas').textContent = (roasCible && roasSeuil) ? ('Dans Meta, le ROAS (retour sur dépense pub) correspondant : au moins ' + n1.format(roasCible) + ' pour être rentable, ' + n1.format(roasSeuil) + ' pour ne pas perdre.') : 'Avec ces chiffres, une vente ne laisse rien pour la publicité.';
+    var pr = $('plan-rules'); pr.textContent = '';
+    [['good','Moins de ' + eur0.format(m.cible) + ' : tu augmentes le budget de 20 % tous les 3 jours.'],
+     ['warn','Entre ' + eur0.format(m.cible) + ' et ' + eur0.format(m.seuil) + ' : tu changes la vidéo ou l’accroche, pas le budget.'],
+     ['bad','Plus de ' + eur0.format(m.seuil) + ' : tu coupes et tu reprends la page ou l’offre.']].forEach(function(r){
+      var li = document.createElement('li'); li.textContent = r[1]; pr.appendChild(li);
+    });
+  }
+
+  function renderChecks(){
+    var ul = $('checks'); ul.textContent = '';
+    var done = 0;
+    CHECKS.forEach(function(ck){
+      var li = document.createElement('li');
+      var lab = document.createElement('label');
+      var inp = document.createElement('input'); inp.type = 'checkbox'; inp.id = 'ck-' + ck[0]; inp.checked = !!checks[ck[0]];
+      if (inp.checked) done++;
+      inp.disabled = !canWrite && !!db;
+      inp.addEventListener('change', function(){ checks[ck[0]] = inp.checked; saveChecks(); renderChecks(); });
+      var sp = document.createElement('span');
+      var b = document.createElement('b'); b.textContent = ck[1];
+      var sm = document.createElement('small'); sm.textContent = ck[2];
+      sp.appendChild(b); sp.appendChild(sm);
+      lab.appendChild(inp); lab.appendChild(sp); li.appendChild(lab); ul.appendChild(li);
+    });
+    $('ck-progress').textContent = done + ' sur ' + CHECKS.length + ' faits' + (done === CHECKS.length ? ' : tu peux ouvrir les ventes.' : '');
+  }
+
+  var armed = null;
+  function renderLog(){
+    var m = model(), box = $('log'); box.textContent = '';
+    var spend = 0, sales = 0, leads = 0, adSpend = 0, adSales = 0;
+    rows.forEach(function(r){ spend += r.depense||0; sales += r.ventes||0; leads += r.inscriptions||0; });
+    adSpend = spend;
+    adSales = rows.reduce(function(a,r){ return a + (r.canal === "Liste d'attente" ? 0 : (r.ventes||0)); }, 0);
+    var profit = sales * m.seuil - spend;
+
+    $('k-spend').textContent = eur0.format(spend);
+    $('k-sales').textContent = String(sales);
+    $('k-cpa').textContent = sales ? eur0.format(spend / sales) : '—';
+    $('k-profit').textContent = eur0.format(profit);
+    $('v-spent').textContent = eur0.format(adSpend) + ' dépensés sur ' + eur0.format(TEST_BUDGET) + ' de test';
+    $('v-meter').style.width = Math.min(100, adSpend / TEST_BUDGET * 100) + '%';
+
+    var pill = $('v-pill'), msg = $('v-msg');
+    if (!rows.length){
+      pill.className = 'pill pill--wait'; pill.textContent = 'Pas encore commencé';
+      msg.textContent = 'Ajoute ton premier jour de publicité plus bas. Le verdict tombe une fois ' + eur0.format(TEST_BUDGET) + ' dépensés : avant, il y a trop peu de ventes pour juger.';
+    } else if (adSpend < TEST_BUDGET){
+      pill.className = 'pill pill--wait'; pill.textContent = 'Trop tôt pour juger';
+      msg.textContent = 'Encore ' + eur0.format(TEST_BUDGET - adSpend) + ' avant de décider. ' + (adSales ? 'Pour l’instant, ' + eur0.format(adSpend / adSales) + ' de pub par vente.' : 'Aucune vente venue de la pub pour l’instant : c’est normal les premiers jours.');
+    } else if (!adSales){
+      pill.className = 'pill pill--bad'; pill.textContent = 'À couper';
+      msg.textContent = eur0.format(adSpend) + ' dépensés sans aucune vente venue de la pub. Coupe, puis revois la vidéo, la page ou l’offre avant de relancer.';
+    } else {
+      var cpa = adSpend / adSales, g = grade(cpa, m);
+      pill.className = 'pill pill--' + g[0]; pill.textContent = g[1];
+      msg.textContent = eur0.format(cpa) + ' de pub par vente. ' + (g[0]==='good' ? 'Tu peux augmenter le budget de 20 % tous les 3 jours.' : g[0]==='warn' ? 'Tu ne perds pas, mais tu gagnes trop peu : change la vidéo ou l’accroche, pas le budget.' : 'Chaque vente te coûte plus qu’elle ne rapporte : coupe la publicité.');
+    }
+
+    if (!db){
+      var e0 = document.createElement('div'); e0.className = 'empty';
+      e0.innerHTML = '<b>Le suivi a besoin d’être connecté.</b><span>Ouvre cette page depuis ton compte Claude pour enregistrer tes journées. Le calcul ci-dessus fonctionne sans.</span>';
+      box.appendChild(e0); return;
+    }
+    if (!rows.length){
+      var e = document.createElement('div'); e.className = 'empty';
+      e.innerHTML = '<b>Aucune journée enregistrée.</b><span>Le soir de ta première publicité, saisis la dépense et le nombre de ventes, puis appuie sur Enregistrer. Le verdict en haut se met à jour tout seul.</span>';
+      box.appendChild(e); return;
+    }
+    var wrap = document.createElement('div'); wrap.className = 'tablebox';
+    var t = document.createElement('table');
+    t.innerHTML = '<thead><tr><th>Jour</th><th>Plateforme</th><th>Dépense</th><th>Ventes</th><th>Inscr.</th><th>Pub / vente</th><th>Résultat</th><th></th></tr></thead>';
+    var tb = document.createElement('tbody');
+    rows.slice().sort(function(a,b){ return a.date < b.date ? 1 : a.date > b.date ? -1 : (a.canal||'').localeCompare(b.canal||''); }).forEach(function(r){
+      var tr = document.createElement('tr');
+      var d = new Date(r.date + 'T12:00:00');
+      var res = (r.ventes||0) * m.seuil - (r.depense||0);
+      var cells = [
+        isNaN(d) ? r.date : d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'}),
+        r.canal || 'Meta',
+        eur.format(r.depense||0),
+        String(r.ventes||0),
+        String(r.inscriptions||0),
+        r.ventes ? eur0.format((r.depense||0)/r.ventes) : '—'
+      ];
+      cells.forEach(function(v){ var td = document.createElement('td'); td.textContent = v; tr.appendChild(td); });
+      var tdr = document.createElement('td');
+      var p = document.createElement('span'); p.className = 'pill pill--' + (res >= 0 ? 'good' : 'bad'); p.textContent = (res >= 0 ? '+ ' : '− ') + eur0.format(Math.abs(res));
+      tdr.appendChild(p); tr.appendChild(tdr);
+      var tdd = document.createElement('td');
+      if (canWrite){
+        var del = document.createElement('button'); del.type = 'button'; del.className = 'del' + (armed === r._id ? ' arm' : '');
+        del.textContent = armed === r._id ? 'Confirmer' : 'Supprimer';
+        del.setAttribute('aria-label', (armed === r._id ? 'Confirmer la suppression du ' : 'Supprimer la ligne du ') + cells[0] + ', ' + cells[1]);
+        del.addEventListener('click', function(){
+          if (armed !== r._id){ armed = r._id; renderLog(); return; }
+          armed = null;
+          db.collection('jours').doc(r._id).delete().catch(function(){ $('a-msg').className = 'formmsg err'; $('a-msg').textContent = 'La suppression a échoué. Réessaie dans un instant.'; });
+        });
+        tdd.appendChild(del);
+      }
+      tr.appendChild(tdd);
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb); wrap.appendChild(t); box.appendChild(wrap);
+  }
+
+  function renderAll(){ renderCalc(); renderChecks(); renderLog(); }
+
+  /* Saving */
+  var costTimer = 0, costBusy = false, costAgain = false;
+  function saveCosts(){
+    if (!db || !canWrite) return;
+    clearTimeout(costTimer);
+    costTimer = setTimeout(function run(){
+      if (costBusy){ costAgain = true; return; }
+      costBusy = true; $('c-status').textContent = 'Enregistrement…';
+      db.doc('reglages/couts').set(Object.assign({}, costs)).then(function(){
+        $('c-status').textContent = 'Enregistré.';
+      }, function(e){ onWriteError(e, 'c-status'); }).then(function(){
+        costBusy = false; if (costAgain){ costAgain = false; run(); }
+      });
+    }, 700);
+  }
+  var ckBusy = false, ckAgain = false;
+  function saveChecks(){
+    if (!db || !canWrite) return;
+    if (ckBusy){ ckAgain = true; return; }
+    ckBusy = true;
+    db.doc('reglages/avant-ouverture').set({ items: Object.assign({}, checks) }).catch(function(e){ onWriteError(e, 'a-msg'); }).then(function(){
+      ckBusy = false; if (ckAgain){ ckAgain = false; saveChecks(); }
+    });
+  }
+  function onWriteError(e, where){
+    var el = $(where); el.className = (where === 'a-msg' ? 'formmsg err' : 'status');
+    if (e && e.code === 'invalid_argument'){ canWrite = false; el.textContent = 'Tu peux consulter cette page, mais pas la modifier.'; $('a-btn').disabled = true; renderAll(); }
+    else if (e && e.code === 'quota_exceeded'){ el.textContent = 'Le stockage de la page est plein : supprime d’anciennes lignes.'; }
+    else { el.textContent = 'L’enregistrement a échoué. Réessaie dans un instant.'; }
+  }
+
+  ['prix','cout','fpct','ffix','urssaf','ret','benef'].forEach(function(k){
+    $('c-'+k).addEventListener('input', function(ev){
+      costs[k] = Math.max(0, num(ev.target.value, DEFAULTS[k]));
+      renderCalc(); renderLog(); saveCosts();
+    });
+  });
+
+  var today = new Date(); today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+  $('a-date').value = today.toISOString().slice(0,10);
+
+  $('addform').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var msg = $('a-msg'); msg.className = 'formmsg';
+    if (!db){ msg.className = 'formmsg err'; msg.textContent = 'Le suivi n’est pas connecté : ouvre la page depuis ton compte Claude.'; return; }
+    var date = $('a-date').value, canal = $('a-canal').value;
+    var spend = num($('a-spend').value, NaN), sales = num($('a-sales').value || 0, NaN), leads = num($('a-leads').value || 0, NaN);
+    if (!date){ msg.className = 'formmsg err'; msg.textContent = 'Choisis le jour.'; return; }
+    if (!(spend >= 0)){ msg.className = 'formmsg err'; msg.textContent = 'Indique la dépense du jour, en euros (0 si aucune).'; $('a-spend').focus(); return; }
+    if (!(sales >= 0) || Math.floor(sales) !== sales){ msg.className = 'formmsg err'; msg.textContent = 'Les ventes sont un nombre entier, 0 ou plus.'; return; }
+    if (!(leads >= 0) || Math.floor(leads) !== leads){ msg.className = 'formmsg err'; msg.textContent = 'Les inscriptions sont un nombre entier, 0 ou plus.'; return; }
+    var id = date + '_' + canal.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    $('a-btn').disabled = true;
+    db.collection('jours').doc(id).set({ date:date, canal:canal, depense:Math.round(spend*100)/100, ventes:sales, inscriptions:leads }).then(function(){
+      msg.textContent = 'Journée enregistrée.';
+      $('a-spend').value = ''; $('a-sales').value = ''; $('a-leads').value = '';
+    }, function(e){ onWriteError(e, 'a-msg'); }).then(function(){ if (canWrite) $('a-btn').disabled = false; });
+  });
+
+  renderAll();
+
+  /* Store */
+  if (window.claude && claude.use){
+    claude.use('user').then(function(user){
+      if (!user || !user.can) return;
+      return Promise.resolve(user.can('data.write')).then(function(ok){ if (ok === false){ canWrite = false; $('a-btn').disabled = true; renderAll(); } });
+    }).catch(function(){});
+    claude.use('db').then(function(store){
+      if (!store){ renderLog(); return; }
+      db = store; renderAll();
+      db.doc('reglages/couts').onSnapshot(function(s){
+        if (s.exists){ var d = s.data(); Object.keys(DEFAULTS).forEach(function(k){ if (typeof d[k] === 'number') costs[k] = d[k]; }); renderCalc(); renderLog(); }
+      }, function(){});
+      db.doc('reglages/avant-ouverture').onSnapshot(function(s){
+        if (s.exists){ checks = Object.assign({}, (s.data().items || {})); renderChecks(); }
+      }, function(){});
+      db.collection('jours').onSnapshot(function(snap){
+        rows = snap.docs.map(function(d){ return Object.assign({ _id:d.id }, d.data()); });
+        renderLog();
+      }, function(){ $('a-msg').className = 'formmsg err'; $('a-msg').textContent = 'Le suivi est momentanément indisponible. Recharge la page.'; });
+    }).catch(function(){ renderLog(); });
+  }
+})();
+</script>
